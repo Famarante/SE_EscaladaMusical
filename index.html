@@ -1,20 +1,106 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
-    <script>      
-      function init() {
-        var stage = new createjs.Stage("demoCanvas");
-        var circle = new createjs.Shape();
-        circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
-        circle.x = 100;
-        circle.y = 100;
-        stage.addChild(circle);
-        stage.update();
-      }
+    <script>
+        var stage, output, lastPhase;
+        function init() {
+            stage = new createjs.Stage("demoCanvas");
+            stage.enableMouseOver();
+
+            var backgroundImage = new createjs.Bitmap("Mount-Everest.png");
+            stage.addChild(backgroundImage);
+            createjs.Ticker.addEventListener("tick", handleTick);
+
+            var startBtnBg = new createjs.Shape();
+            startBtnBg.name = "buttonBackground";
+            startBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 150, 60, 10);
+
+            var startBtnTxt = new createjs.Text("Jogar!", "bold 24px Arial", "#FFFFFF");
+            startBtnTxt.name = "buttonText";
+            startBtnTxt.textAlign = "center";
+            startBtnTxt.textBaseline = "middle";
+            startBtnTxt.x = 150/2;
+            startBtnTxt.y = 60/2;
+
+            var startBtn = new createjs.Container();
+            startBtn.name = "startButton";
+            startBtn.x = 750;
+            startBtn.y = 465;
+            startBtn.addChild(startBtnBg, startBtnTxt);
+
+            stage.addChild(startBtn);
+
+            startBtn.on("mouseover", handleMouseEvent);
+            startBtn.on("mouseout", handleMouseEvent);
+            startBtn.on("click", handleMouseEvent);
+
+            var rulesBtnBg = new createjs.Shape();
+            rulesBtnBg.name = "buttonBackground";
+            rulesBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 150, 60, 10);
+
+            var rulesBtnTxt = new createjs.Text("Regras", "bold 24px Arial", "#FFFFFF");
+            rulesBtnTxt.name = "buttonText";
+            rulesBtnTxt.textAlign = "center";
+            rulesBtnTxt.textBaseline = "middle";
+            rulesBtnTxt.x = 150/2;
+            rulesBtnTxt.y = 60/2;
+
+            var rulesBtn = new createjs.Container();
+            rulesBtn.name = "rulesButton";
+            rulesBtn.x = 550;
+            rulesBtn.y = 465;
+            rulesBtn.addChild(rulesBtnBg, rulesBtnTxt);
+
+            stage.addChild(rulesBtn);
+
+            rulesBtn.on("mouseover", handleMouseEvent);
+            rulesBtn.on("mouseout", handleMouseEvent);
+            rulesBtn.on("click", handleMouseEvent);
+
+            stage.update();
+        }
+
+        function handleMouseEvent(evt) {
+            var target = evt.target;
+            switch(evt.type){
+                case "mouseover":
+                    if(target.name == "buttonBackground")
+                        target.graphics.clear().beginFill("blue").drawRoundRect(0, 0, 150, 60, 10);
+                    else{
+                        var parent = target.parent;
+                        var background = parent.children[0];
+                        background.graphics.clear().beginFill("blue").drawRoundRect(0, 0, 150, 60, 10);
+                    }
+                    break;
+                case "click":
+                        if(target.parent.name == "startButton"){
+                            alert("JOGAR");
+                        }
+                        else if(target.parent.name == "rulesButton"){
+                            alert("REGRAS");
+                        }
+                    break;
+                case "mouseout":
+                    if(target.name == "buttonBackground")
+                        target.graphics.clear().beginFill("red").drawRoundRect(0, 0, 150, 60, 10);
+                    else{
+                        var parent = target.parent;
+                        var background = parent.children[0];
+                        background.graphics.clear().beginFill("red").drawRoundRect(0, 0, 150, 60, 10);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            stage.update();
+        }
+        function handleTick(event) {
+            stage.update();
+        }
     </script>
-  </head>
-  <body onload="init();">
-    <canvas id="demoCanvas" width="500" height="200"></canvas>
-  </body>
+</head>
+<body onload="init();">
+<canvas id="demoCanvas" width="960" height="575"></canvas>
+</body>
 </html>
