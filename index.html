@@ -3,12 +3,27 @@
 <head>
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
-        var stage, output, lastPhase;
-        function init() {
+        var stage, preload, bird;
+        function init(){
+            var audioPath = "assets/";
+            var sounds = [
+                {id:"Bird", src:"assets/sounds/bird_sound.mp3"},
+                {src: "assets/images/bird_sprite.png", id: "bird_sprite"}
+            ];
+            createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
+            createjs.Sound.alternateExtensions = ["ogg"];
+
+            preload = new createjs.LoadQueue(false);
+            preload.addEventListener("complete", handleComplete);
+            preload.installPlugin(createjs.Sound);
+            preload.loadManifest(sounds);
+        }
+        function handleComplete() {
+
             stage = new createjs.Stage("demoCanvas");
             stage.enableMouseOver();
 
-            var backgroundImage = new createjs.Bitmap("Mount-Everest.png");
+            var backgroundImage = new createjs.Bitmap("assets/images/Mount-Everest.png");
             stage.addChild(backgroundImage);
             createjs.Ticker.addEventListener("tick", handleTick);
 
@@ -57,6 +72,25 @@
             rulesBtn.on("mouseover", handleMouseEvent);
             rulesBtn.on("mouseout", handleMouseEvent);
             rulesBtn.on("click", handleMouseEvent);
+            console.log(preload);
+            var spriteSheet = new createjs.SpriteSheet({
+                framerate: 30,
+                /*"images": ["assets/images/bird_sprite2.png"],
+                 "frames": {"height": 168.667, "count": 14, "width": 153},
+                 // define two animations, run (loops, 1.5x speed) and jump (returns to run):
+                 "animations": {
+                 "fly": [0, 14]
+                 }*/
+                "images": [preload.getResult("bird_sprite")],
+                "frames": {"height": 314, "count": 22, "width": 240},
+                // define two animations, run (loops, 1.5x speed) and jump (returns to run):
+                "animations": {
+                    "fly": [0, 21, "fly"]
+                }
+            });
+
+            bird = new createjs.Sprite(spriteSheet, "fly");
+            createjs.Ticker.on("tick", handleTick);
 
             stage.update();
         }
@@ -75,7 +109,7 @@
                     break;
                 case "click":
                         if(target.parent.name == "startButton"){
-                            alert("JOGAR");
+                            firstLevel();
                         }
                         else if(target.parent.name == "rulesButton"){
                             alert("REGRAS");
@@ -98,9 +132,35 @@
         function handleTick(event) {
             stage.update();
         }
+
+        function playSound(target) {
+            //Play the sound: play (src, interrupt, delay, offset, loop, volume, pan)
+            var instance = createjs.Sound.play(target);
+            if (instance == null || instance.playState == createjs.Sound.PLAY_FAILED) {
+                return;
+            }
+        }
+        function handleLoad(event) {
+        }
+        function firstLevel(){
+            clearStage();
+            playSound("Bird");
+            stage.addChild(bird);
+            stage.update();
+        }
+        function clearStage(){
+            for(var i = 1; i < stage.numChildren; i++){
+                console.log(stage.children[i]);
+                stage.removeChildAt(i);
+                stage.update();
+                i--;
+            }
+        }
     </script>
 </head>
 <body onload="init();">
+<div id="content">
 <canvas id="demoCanvas" width="960" height="575"></canvas>
+</div>
 </body>
 </html>
