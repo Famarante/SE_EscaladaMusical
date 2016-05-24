@@ -3,7 +3,7 @@
 <head>
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
-        var stage, preload, bird;
+        var stage, preload, bird, startTime, timerTxt;
         function init(){
             var audioPath = "assets/";
             var sounds = [
@@ -61,6 +61,13 @@
             rulesBtnTxt.x = 150/2;
             rulesBtnTxt.y = 60/2;
 
+            timerTxt = new createjs.Text("Tempo: ", "bold 24px Arial", "#FFFFFF");
+            timerTxt.name = "timerText";
+            timerTxt.textAlign = "left";
+            timerTxt.textBaseline = "middle";
+            timerTxt.x = 760;
+            timerTxt.y = 40;
+
             var rulesBtn = new createjs.Container();
             rulesBtn.name = "rulesButton";
             rulesBtn.x = 550;
@@ -72,7 +79,7 @@
             rulesBtn.on("mouseover", handleMouseEvent);
             rulesBtn.on("mouseout", handleMouseEvent);
             rulesBtn.on("click", handleMouseEvent);
-            console.log(preload);
+
             var spriteSheet = new createjs.SpriteSheet({
                 framerate: 30,
                 /*"images": ["assets/images/bird_sprite2.png"],
@@ -130,12 +137,21 @@
             stage.update();
         }
         function handleTick(event) {
+            var currentTime = (new Date()).getTime();
+            var time = Math.floor((currentTime-startTime)/1000);
+            if(time > 59){
+                timerTxt.text = "Tempo: " + Math.floor(time/60) + "m" + time%60 + "s";
+            }
+            else{
+                timerTxt.text = "Tempo: " + time + "s";
+            }
             stage.update();
         }
 
         function playSound(target) {
             //Play the sound: play (src, interrupt, delay, offset, loop, volume, pan)
-            var instance = createjs.Sound.play(target);
+            var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: -1, volume: 0.5})
+            var instance = createjs.Sound.play(target, ppc);
             if (instance == null || instance.playState == createjs.Sound.PLAY_FAILED) {
                 return;
             }
@@ -144,6 +160,8 @@
         }
         function firstLevel(){
             clearStage();
+            startTime = (new Date()).getTime();
+            stage.addChild(timerTxt);
             playSound("Bird");
             stage.addChild(bird);
             stage.update();
