@@ -3,119 +3,71 @@
 <head>
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
-        var stage, preload, bird, startTime, timerTxt;
-        function init(){
-            var audioPath = "assets/";
-            var sounds = [
-                {id:"Bird", src:"assets/sounds/bird_sound.mp3"},
-                {src: "assets/images/bird_sprite.png", id: "bird_sprite"}
-            ];
-            createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
-            createjs.Sound.alternateExtensions = ["ogg"];
+        var stage, preload, bird, startTime, timerTxt, bubbleSpeech;
 
-            preload = new createjs.LoadQueue(false);
-            preload.addEventListener("complete", handleComplete);
-            preload.installPlugin(createjs.Sound);
-            preload.loadManifest(sounds);
-        }
         function handleComplete() {
-
             stage = new createjs.Stage("demoCanvas");
             stage.enableMouseOver();
 
-            var backgroundImage = new createjs.Bitmap("assets/images/Mount-Everest.png");
-            stage.addChild(backgroundImage);
-            createjs.Ticker.addEventListener("tick", handleTick);
-
-            var startBtnBg = new createjs.Shape();
-            startBtnBg.name = "buttonBackground";
-            startBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 150, 60, 10);
-
-            var startBtnTxt = new createjs.Text("Jogar!", "bold 24px Arial", "#FFFFFF");
-            startBtnTxt.name = "buttonText";
-            startBtnTxt.textAlign = "center";
-            startBtnTxt.textBaseline = "middle";
-            startBtnTxt.x = 150/2;
-            startBtnTxt.y = 60/2;
-
-            var startBtn = new createjs.Container();
-            startBtn.name = "startButton";
-            startBtn.x = 750;
-            startBtn.y = 465;
-            startBtn.addChild(startBtnBg, startBtnTxt);
-
-            stage.addChild(startBtn);
-
-            startBtn.on("mouseover", handleMouseEvent);
-            startBtn.on("mouseout", handleMouseEvent);
-            startBtn.on("click", handleMouseEvent);
-
-            var rulesBtnBg = new createjs.Shape();
-            rulesBtnBg.name = "buttonBackground";
-            rulesBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 150, 60, 10);
-
-            var rulesBtnTxt = new createjs.Text("Regras", "bold 24px Arial", "#FFFFFF");
-            rulesBtnTxt.name = "buttonText";
-            rulesBtnTxt.textAlign = "center";
-            rulesBtnTxt.textBaseline = "middle";
-            rulesBtnTxt.x = 150/2;
-            rulesBtnTxt.y = 60/2;
-
-            timerTxt = new createjs.Text("Tempo: ", "bold 24px Arial", "#FFFFFF");
+            timerTxt = new createjs.Text("Tempo: ", "bold 24px Arial", "#000000");
             timerTxt.name = "timerText";
             timerTxt.textAlign = "left";
             timerTxt.textBaseline = "middle";
-            timerTxt.x = 760;
+            timerTxt.x = 860;
             timerTxt.y = 40;
-
-            var rulesBtn = new createjs.Container();
-            rulesBtn.name = "rulesButton";
-            rulesBtn.x = 550;
-            rulesBtn.y = 465;
-            rulesBtn.addChild(rulesBtnBg, rulesBtnTxt);
-
-            stage.addChild(rulesBtn);
-
-            rulesBtn.on("mouseover", handleMouseEvent);
-            rulesBtn.on("mouseout", handleMouseEvent);
-            rulesBtn.on("click", handleMouseEvent);
 
             var spriteSheet = new createjs.SpriteSheet({
                 framerate: 30,
-                /*"images": ["assets/images/bird_sprite2.png"],
-                 "frames": {"height": 168.667, "count": 14, "width": 153},
-                 // define two animations, run (loops, 1.5x speed) and jump (returns to run):
-                 "animations": {
-                 "fly": [0, 14]
-                 }*/
                 "images": [preload.getResult("bird_sprite")],
-                "frames": {"height": 314, "count": 22, "width": 240},
+                "frames": {"height": 314, "count": 22, "width": 240, "regX": 157, "regY": 120},
                 // define two animations, run (loops, 1.5x speed) and jump (returns to run):
                 "animations": {
                     "fly": [0, 21, "fly"]
                 }
             });
-
+/*
+            var birdSprite = new createjs.Sprite(spriteSheet, "fly");
+            bird = new createjs.SpriteContainer(birdSprite);
+*/
             bird = new createjs.Sprite(spriteSheet, "fly");
-            createjs.Ticker.on("tick", handleTick);
-
-            stage.update();
+            startMenuLevel();
         }
 
+        function init() {
+            var manifest = [
+                {id: "bird_sound", src: "assets/sounds/bird_sound.mp3"},
+                {id: "bird_sprite", src: "assets/images/bird_sprite.png"},
+                {id: "background", src: "assets/images/background.png"},
+                {id: "start_menu_background", src: "assets/images/start_menu_background.png"},
+                {id: "selection_level_background", src: "assets/images/selection_level_background.png"},
+                {id: "bubble", src: "assets/images/bubble.png"}
+
+            ];
+            createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
+
+            preload = new createjs.LoadQueue(false);
+            preload.addEventListener("complete", handleComplete);
+            preload.installPlugin(createjs.Sound);
+            preload.loadManifest(manifest);
+        }
+        
         function handleMouseEvent(evt) {
             var target = evt.target;
             switch(evt.type){
                 case "mouseover":
                     if(target.name == "buttonBackground")
-                        target.graphics.clear().beginFill("blue").drawRoundRect(0, 0, 150, 60, 10);
-                    else{
+                        target.graphics.clear().beginFill("blue").drawRoundRect(0, 0, 256, 87, 20);
+                    /*else{
                         var parent = target.parent;
                         var background = parent.children[0];
-                        background.graphics.clear().beginFill("blue").drawRoundRect(0, 0, 150, 60, 10);
-                    }
+                        background.graphics.clear().beginFill("blue").drawRoundRect(0, 0, 256, 87, 20);
+                    }*/
                     break;
                 case "click":
-                        if(target.parent.name == "startButton"){
+                        if(target.parent.name == "startButton") {
+                            selectionLevel();
+                        }
+                        else if(target.name == "firstLevel"){
                             firstLevel();
                         }
                         else if(target.parent.name == "rulesButton"){
@@ -124,12 +76,12 @@
                     break;
                 case "mouseout":
                     if(target.name == "buttonBackground")
-                        target.graphics.clear().beginFill("red").drawRoundRect(0, 0, 150, 60, 10);
-                    else{
+                        target.graphics.clear().beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
+                    /*else if(){
                         var parent = target.parent;
                         var background = parent.children[0];
-                        background.graphics.clear().beginFill("red").drawRoundRect(0, 0, 150, 60, 10);
-                    }
+                        background.graphics.clear().beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
+                    }*/
                     break;
                 default:
                     break;
@@ -138,6 +90,14 @@
         }
         function handleTick(event) {
             var currentTime = (new Date()).getTime();
+            if(bird.x > -25 && bubbleSpeech != null) {
+                bubbleSpeech.x -= 5;
+                bird.x -= 5;
+            }
+            else if (bird.x <= -25 && bubbleSpeech != null){
+                bubbleSpeech.x = 1060;
+                bird.x = 1100;
+            }
             var time = Math.floor((currentTime-startTime)/1000);
             if(time > 59){
                 timerTxt.text = "Tempo: " + Math.floor(time/60) + "m" + time%60 + "s";
@@ -158,17 +118,147 @@
         }
         function handleLoad(event) {
         }
+        function startMenuLevel(){
+            stage.name = "startMenuLevel";
+            var startMenuBackground = new createjs.Bitmap(preload.getResult("start_menu_background"));
+            stage.addChild(startMenuBackground);
+
+            var startBtnBg = new createjs.Shape();
+            startBtnBg.name = "buttonBackground";
+            startBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
+
+            var startBtnTxt = new createjs.Text("Jogar!", "bold 24px Arial", "#FFFFFF");
+            startBtnTxt.name = "buttonText";
+            startBtnTxt.textAlign = "center";
+            startBtnTxt.textBaseline = "middle";
+            startBtnTxt.x = 150/2;
+            startBtnTxt.y = 60/2;
+
+            var startBtn = new createjs.Container();
+            startBtn.name = "startButton";
+            startBtn.x = 384;
+            startBtn.y = 568;
+            startBtn.alpha = 0.01;
+            startBtn.addChild(startBtnBg, startBtnTxt);
+
+            startBtn.cursor = "pointer";
+
+            stage.addChild(startBtn);
+
+            startBtn.on("mouseover", handleMouseEvent);
+            startBtn.on("mouseout", handleMouseEvent);
+            startBtn.on("click", handleMouseEvent);
+
+            var rulesBtnBg = new createjs.Shape();
+            rulesBtnBg.name = "buttonBackground";
+            rulesBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
+
+            var rulesBtnTxt = new createjs.Text("Regras", "bold 24px Arial", "#FFFFFF");
+            rulesBtnTxt.name = "buttonText";
+            rulesBtnTxt.textAlign = "center";
+            rulesBtnTxt.textBaseline = "middle";
+            rulesBtnTxt.x = 150/2;
+            rulesBtnTxt.y = 60/2;
+
+            var rulesBtn = new createjs.Container();
+            rulesBtn.name = "rulesButton";
+            rulesBtn.x = 384;
+            rulesBtn.y = 434;
+            rulesBtn.alpha = 0.01;
+            rulesBtn.addChild(rulesBtnBg, rulesBtnTxt);
+
+            rulesBtn.cursor = "pointer";
+
+            stage.addChild(rulesBtn);
+
+            rulesBtn.on("mouseover", handleMouseEvent);
+            rulesBtn.on("mouseout", handleMouseEvent);
+            rulesBtn.on("click", handleMouseEvent);
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+
+            stage.update();
+        }
         function firstLevel(){
             clearStage();
+
+            var startMenuBackground = new createjs.Bitmap(preload.getResult("background"));
+            stage.addChild(startMenuBackground);
+
+            var bubbleSpeechImage = new createjs.Bitmap(preload.getResult("bubble"));
+            bubbleSpeechImage.scaleX = -0.03;
+            bubbleSpeechImage.scaleY = 0.03;
+
+            var bubbleSpeechTxt = new createjs.Text("C", "bold 34px Arial", "#000000");
+            bubbleSpeechTxt.name = "buttonText";
+            bubbleSpeechTxt.textAlign = "center";
+            bubbleSpeechTxt.textBaseline = "middle";
+            bubbleSpeechTxt.x = -33;
+            bubbleSpeechTxt.y = 20;
+
+            bubbleSpeech = new createjs.Container();
+            bubbleSpeech.addChild(bubbleSpeechImage, bubbleSpeechTxt);
+            bubbleSpeech.x = 1060;
+            bubbleSpeech.y = 120;
+            stage.addChild(bubbleSpeech);
+
+            stage.name = "firstlevel";
+            createjs.Ticker.addEventListener("tick", handleTick);
             startTime = (new Date()).getTime();
             stage.addChild(timerTxt);
-            playSound("Bird");
+            playSound("bird_sound");
+            bird.x = 1100;
+            bird.y = 150;
+            bird.scaleX = 0.5;
+            bird.scaleY = 0.5;
             stage.addChild(bird);
+
+            var skipBtnBg = new createjs.Shape();
+            skipBtnBg.name = "buttonBackground";
+            skipBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
+
+            var skipBtnTxt = new createjs.Text("Passar", "bold 48px Arial", "#FFFFFF");
+            skipBtnTxt.name = "buttonText";
+            skipBtnTxt.textAlign = "center";
+            skipBtnTxt.textBaseline = "middle";
+            skipBtnTxt.x = 256/2;
+            skipBtnTxt.y = 87/2;
+
+            var skipBtn = new createjs.Container();
+            skipBtn.name = "skipButton";
+            skipBtn.x = 740;
+            skipBtn.y = 650;
+            skipBtn.addChild(skipBtnBg, skipBtnTxt);
+
+            skipBtn.cursor = "pointer";
+
+            stage.addChild(skipBtn);
+
+            stage.update();
+        }
+        function selectionLevel(){
+            clearStage();
+
+            stage.name = "selectionLevel";
+            var selectionLevelBackground = new createjs.Bitmap(preload.getResult("selection_level_background"));
+            stage.addChild(selectionLevelBackground);
+
+            var firstLevel = new createjs.Shape();
+            firstLevel.graphics.beginFill("red").drawRoundRect(0, 0, 130, 35, 10);
+            firstLevel.x = 216;
+            firstLevel.y = 707;
+            firstLevel.alpha = 0.01;
+            firstLevel.cursor = "pointer";
+            firstLevel.name = "firstLevel";
+            firstLevel.on("mouseover", handleMouseEvent);
+            firstLevel.on("mouseout", handleMouseEvent);
+            firstLevel.on("click", handleMouseEvent);
+            stage.addChild(firstLevel);
+
             stage.update();
         }
         function clearStage(){
-            for(var i = 1; i < stage.numChildren; i++){
-                console.log(stage.children[i]);
+            for(var i = 0; i < stage.numChildren; i++){
                 stage.removeChildAt(i);
                 stage.update();
                 i--;
@@ -178,7 +268,7 @@
 </head>
 <body onload="init();">
 <div id="content">
-<canvas id="demoCanvas" width="960" height="575"></canvas>
+<canvas id="demoCanvas" width="1024" height="768"></canvas>
 </div>
 </body>
 </html>
