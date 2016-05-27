@@ -27,36 +27,42 @@
             });
             
             if(window.innerWidth < 1024){
-                    stage.canvas.width = window.innerWidth;
-                    var factor = 1 - (1024 - window.innerWidth)/1024;
-                    stage.scaleX = factor;
-                    stage.scaleY = factor;
-                    console.log(factor);
-                }
-                if(window.innerHeight < 768){
-                    stage.canvas.height = window.innerHeight;
-                    var factor = 1 - (768 - window.innerHeight)/768;
-                    stage.scaleX = factor;
-                    stage.scaleY = factor;
-                }
+                stage.canvas.width = window.innerWidth;
+                var factor = 1 - (1024 - window.innerWidth)/1024;
+                stage.scaleX = factor;
+                stage.scaleY = factor;
+                console.log(factor);
+            }
+            if(window.innerHeight < 768){
+                stage.canvas.height = window.innerHeight;
+                var factor = 1 - (768 - window.innerHeight)/768;
+                stage.scaleX = factor;
+                stage.scaleY = factor;
+            }
 
             bird = new createjs.Sprite(spriteSheet, "fly");
             function handleResize() {
                 console.log(window.innerWidth);
                 console.log(window.innerHeight);
+                var factor = 1;
                 if(window.innerWidth < 1024){
                     stage.canvas.width = window.innerWidth;
-                    var factor = 1 - (1024 - window.innerWidth)/1024;
-                    stage.scaleX = factor;
-                    stage.scaleY = factor;
+                    var factorTmp = 1 - (1024 - window.innerWidth)/1024;
+                    if(factorTmp < factor){
+                        factor = factorTmp;
+                    }
                     console.log(factor);
                 }
                 if(window.innerHeight < 768){
                     stage.canvas.height = window.innerHeight;
-                    var factor = 1 - (768 - window.innerHeight)/768;
-                    stage.scaleX = factor;
-                    stage.scaleY = factor;
+                    var factorTmp = 1 - (768 - window.innerHeight)/768;
+                    if(factorTmp < factor){
+                        factor = factorTmp;
+                    }
+                    stage.update(factor);
                 }
+                stage.scaleX = factor;
+                stage.scaleY = factor;
                 stage.update();
             }
             window.addEventListener("resize", handleResize);
@@ -205,7 +211,7 @@
             rulesBtn.on("mouseover", handleMouseEvent);
             rulesBtn.on("mouseout", handleMouseEvent);
             rulesBtn.on("click", handleMouseEvent);
-
+            
             createjs.Ticker.addEventListener("tick", handleTick);
 
             stage.update();
