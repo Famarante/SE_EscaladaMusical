@@ -3,7 +3,45 @@
 <head>
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
-        var stage, preload, bird, startTime, timerTxt, bubbleSpeech;
+        var stage, preload, bird, startTime, timerTxt, bubbleSpeech, factor = 1;
+        
+        document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+        document.body.scroll = "no"; // ie only
+        
+        function handleResize() {
+            console.log(window.innerWidth);
+            console.log(window.innerHeight);
+            stage.canvas.width = 1024;
+            stage.canvas.height = 768;
+            console.log("Entra!");
+            factor = 1;
+            if(window.innerWidth < 1024){
+                stage.canvas.width = window.innerWidth;
+                var factorTmp = 1 - (1024 - window.innerWidth)/1024;
+                console.log("Entra!");
+                if(factorTmp < factor){
+                    factor = factorTmp;
+                }
+                console.log(factor);
+            }
+            if(window.innerHeight < 768){
+                stage.canvas.height = window.innerHeight;
+                var factorTmp = 1 - (768 - window.innerHeight)/768;
+                if(factorTmp < factor){
+                    factor = factorTmp;
+                }
+                stage.update(factor);
+            }
+            if(window.innerWidth >= 1024 || window.innerHeight >= 768){
+                console.log(window.innerWidth);
+                stage.canvas.width = 1024;
+                stage.canvas.height = 768;
+                console.log(factor);
+            }
+            stage.scaleX = factor;
+            stage.scaleY = factor;
+            stage.update();
+        }
         
         function handleComplete() {
             stage = new createjs.Stage("canvas");
@@ -26,45 +64,10 @@
                 }
             });
             
-            if(window.innerWidth < 1024){
-                stage.canvas.width = window.innerWidth;
-                var factor = 1 - (1024 - window.innerWidth)/1024;
-                stage.scaleX = factor;
-                stage.scaleY = factor;
-                console.log(factor);
-            }
-            if(window.innerHeight < 768){
-                stage.canvas.height = window.innerHeight;
-                var factor = 1 - (768 - window.innerHeight)/768;
-                stage.scaleX = factor;
-                stage.scaleY = factor;
-            }
-
+            handleResize()
+            
             bird = new createjs.Sprite(spriteSheet, "fly");
-            function handleResize() {
-                console.log(window.innerWidth);
-                console.log(window.innerHeight);
-                var factor = 1;
-                if(window.innerWidth < 1024){
-                    stage.canvas.width = window.innerWidth;
-                    var factorTmp = 1 - (1024 - window.innerWidth)/1024;
-                    if(factorTmp < factor){
-                        factor = factorTmp;
-                    }
-                    console.log(factor);
-                }
-                if(window.innerHeight < 768){
-                    stage.canvas.height = window.innerHeight;
-                    var factorTmp = 1 - (768 - window.innerHeight)/768;
-                    if(factorTmp < factor){
-                        factor = factorTmp;
-                    }
-                    stage.update(factor);
-                }
-                stage.scaleX = factor;
-                stage.scaleY = factor;
-                stage.update();
-            }
+
             window.addEventListener("resize", handleResize);
             
             startMenuLevel();
