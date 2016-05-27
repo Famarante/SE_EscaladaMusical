@@ -25,9 +25,22 @@
                     "fly": [0, 21, "fly"]
                 }
             });
+            
+            if(window.innerWidth < 1024){
+                    stage.canvas.width = window.innerWidth;
+                    var factor = 1 - (1024 - window.innerWidth)/1024;
+                    stage.scaleX = factor;
+                    stage.scaleY = factor;
+                    console.log(factor);
+                }
+                if(window.innerHeight < 768){
+                    stage.canvas.height = window.innerHeight;
+                    var factor = 1 - (768 - window.innerHeight)/768;
+                    stage.scaleX = factor;
+                    stage.scaleY = factor;
+                }
 
             bird = new createjs.Sprite(spriteSheet, "fly");
-            window.addEventListener("resize", handleResize);
             function handleResize() {
                 console.log(window.innerWidth);
                 console.log(window.innerHeight);
@@ -46,7 +59,8 @@
                 }
                 stage.update();
             }
-            console.log(stage.canvas);
+            window.addEventListener("resize", handleResize);
+            
             startMenuLevel();
         }
 
