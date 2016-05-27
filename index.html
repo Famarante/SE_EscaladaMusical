@@ -4,9 +4,9 @@
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
         var stage, preload, bird, startTime, timerTxt, bubbleSpeech;
-
+        
         function handleComplete() {
-            stage = new createjs.Stage("demoCanvas");
+            stage = new createjs.Stage("canvas");
             stage.enableMouseOver();
 
             timerTxt = new createjs.Text("Tempo: ", "bold 24px Arial", "#000000");
@@ -25,11 +25,28 @@
                     "fly": [0, 21, "fly"]
                 }
             });
-/*
-            var birdSprite = new createjs.Sprite(spriteSheet, "fly");
-            bird = new createjs.SpriteContainer(birdSprite);
-*/
+
             bird = new createjs.Sprite(spriteSheet, "fly");
+            window.addEventListener("resize", handleResize);
+            function handleResize() {
+                console.log(window.innerWidth);
+                console.log(window.innerHeight);
+                if(window.innerWidth < 1024){
+                    stage.canvas.width = window.innerWidth;
+                    var factor = 1 - (1024 - window.innerWidth)/1024;
+                    stage.scaleX = factor;
+                    stage.scaleY = factor;
+                    console.log(factor);
+                }
+                if(window.innerHeight < 768){
+                    stage.canvas.height = window.innerHeight;
+                    var factor = 1 - (768 - window.innerHeight)/768;
+                    stage.scaleX = factor;
+                    stage.scaleY = factor;
+                }
+                stage.update();
+            }
+            console.log(stage.canvas);
             startMenuLevel();
         }
 
@@ -268,7 +285,7 @@
 </head>
 <body onload="init();">
 <div id="content">
-<canvas id="demoCanvas" width="1024" height="768"></canvas>
+<canvas id="canvas" width="1024" height="768"></canvas>
 </div>
 </body>
 </html>
