@@ -9,35 +9,27 @@
         document.body.scroll = "no"; // ie only
         
         function handleResize() {
-            console.log(window.innerWidth);
-            console.log(window.innerHeight);
             stage.canvas.width = 1024;
             stage.canvas.height = 768;
-            console.log("Entra!");
             factor = 1;
             if(window.innerWidth < 1024){
-                stage.canvas.width = window.innerWidth;
                 var factorTmp = 1 - (1024 - window.innerWidth)/1024;
-                console.log("Entra!");
                 if(factorTmp < factor){
                     factor = factorTmp;
                 }
-                console.log(factor);
             }
             if(window.innerHeight < 768){
-                stage.canvas.height = window.innerHeight;
                 var factorTmp = 1 - (768 - window.innerHeight)/768;
                 if(factorTmp < factor){
                     factor = factorTmp;
                 }
-                stage.update(factor);
             }
             if(window.innerWidth >= 1024 || window.innerHeight >= 768){
-                console.log(window.innerWidth);
                 stage.canvas.width = 1024;
                 stage.canvas.height = 768;
-                console.log(factor);
             }
+            stage.canvas.width = 1024*factor;
+            stage.canvas.height = 768*factor;
             stage.scaleX = factor;
             stage.scaleY = factor;
             stage.update();
@@ -64,7 +56,7 @@
                 }
             });
             
-            handleResize()
+            handleResize();
             
             bird = new createjs.Sprite(spriteSheet, "fly");
 
