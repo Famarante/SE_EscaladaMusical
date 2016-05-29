@@ -189,7 +189,7 @@
         function playSound(target) {
             //Play the sound: play (src, interrupt, delay, offset, loop, volume, pan)
             var random = Math.floor((Math.random() * 4) + 1);
-            var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.5});
+            var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.1});
             birdSound = createjs.Sound.play(target, ppc);
             if (birdSound == null || birdSound.playState == createjs.Sound.PLAY_FAILED) {
                 return;
