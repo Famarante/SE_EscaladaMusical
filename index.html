@@ -1242,7 +1242,7 @@
         function addTracksButtons() {
 
         }
-        function firstLevel3(){
+        function secondLevel3(){
             clearStage();
 
             stage.name = "firstlevel3";
@@ -1250,8 +1250,8 @@
             createjs.Ticker.addEventListener("tick", handleTick);
             startTime = (new Date()).getTime();
 
-            var firstLevel3Background = new createjs.Bitmap(preload.getResult("level1_houses"));
-            stage.addChild(firstLevel3Background);
+            var secondLevel3Background = new createjs.Bitmap(preload.getResult("level2_tracks"));
+            stage.addChild(secondLevel3Background);
             stage.addChild(meterCounterTxt);
             stage.addChild(timerTxt);
 
