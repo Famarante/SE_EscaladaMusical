@@ -122,7 +122,7 @@
                     }
                     break;
                 case "click":
-                        if(target.parent.name == "startButton") {
+                        if(target.name == "startButton") {
                             selectionLevel();
                         }
                         else if(target.name == "firstLevel" && stage.name == "selectionLevel"){
@@ -131,8 +131,11 @@
                         else if(target.name == "secondLevel" && stage.name == "selectionLevel"){
                             secondLevel1();
                         }
-                        else if(target.parent.name == "rulesButton"){
-                            alert("REGRAS");
+                        else if(target.name == "rulesButton"){
+                            rulesMenu();
+                        }
+                        else if(target.name == "creditsButton"){
+                            creditsMenu();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel1"){
                             meterCounter += 100;
@@ -525,54 +528,63 @@
             var startMenuBackground = new createjs.Bitmap(preload.getResult("start_menu_background"));
             stage.addChild(startMenuBackground);
 
-            var startBtnBg = new createjs.Shape();
-            startBtnBg.name = "buttonBackground";
-            startBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
-
-            var startBtnTxt = new createjs.Text("Jogar!", "bold 24px Arial", "#FFFFFF");
-            startBtnTxt.name = "buttonText";
-            startBtnTxt.textAlign = "center";
-            startBtnTxt.textBaseline = "middle";
-            startBtnTxt.x = 150/2;
-            startBtnTxt.y = 60/2;
-
-            var startBtn = new createjs.Container();
-            startBtn.name = "startButton";
-            startBtn.x = 384;
-            startBtn.y = 568;
-            startBtn.alpha = 0.01;
-            startBtn.addChild(startBtnBg, startBtnTxt);
-
-            startBtn.cursor = "pointer";
-
-            stage.addChild(startBtn);
-
-            startBtn.on("click", handleMouseEvent);
-
-            var rulesBtnBg = new createjs.Shape();
-            rulesBtnBg.name = "buttonBackground";
-            rulesBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
-
-            var rulesBtnTxt = new createjs.Text("Regras", "bold 24px Arial", "#FFFFFF");
-            rulesBtnTxt.name = "buttonText";
-            rulesBtnTxt.textAlign = "center";
-            rulesBtnTxt.textBaseline = "middle";
-            rulesBtnTxt.x = 150/2;
-            rulesBtnTxt.y = 60/2;
-
-            var rulesBtn = new createjs.Container();
+            var rulesBtn = new createjs.Shape();
             rulesBtn.name = "rulesButton";
-            rulesBtn.x = 384;
-            rulesBtn.y = 434;
+            rulesBtn.x = 404;
+            rulesBtn.y = 427;
             rulesBtn.alpha = 0.01;
-            rulesBtn.addChild(rulesBtnBg, rulesBtnTxt);
+            rulesBtn.graphics.beginFill("red").drawRoundRect(0, 0, 217, 75, 20);
 
             rulesBtn.cursor = "pointer";
 
-            stage.addChild(rulesBtn);
+            var startBtn = new createjs.Shape();
+            startBtn.name = "startButton";
+            startBtn.x = 404;
+            startBtn.y = 518;
+            startBtn.alpha = 0.01;
+            startBtn.graphics.beginFill("red").drawRoundRect(0, 0, 217, 75, 20);
+
+            startBtn.cursor = "pointer";
+
+            var creditsBtn = new createjs.Shape();
+            creditsBtn.name = "creditsButton";
+            creditsBtn.x = 404;
+            creditsBtn.y = 612;
+            creditsBtn.alpha = 0.01;
+            creditsBtn.graphics.beginFill("red").drawRoundRect(0, 0, 217, 75, 20);
+
+            creditsBtn.cursor = "pointer";
+
+            stage.addChild(rulesBtn, startBtn, creditsBtn);
 
             rulesBtn.on("click", handleMouseEvent);
-            
+            startBtn.on("click", handleMouseEvent);
+            creditsBtn.on("click", handleMouseEvent);
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+
+            stage.update();
+        }
+
+        function rulesMenu(){
+            clearStage();
+
+            stage.name = "rulesmenu";
+            var startMenuBackground = new createjs.Bitmap(preload.getResult("background"));
+            stage.addChild(startMenuBackground);
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+
+            stage.update();
+        }
+
+        function creditsMenu(){
+            clearStage();
+
+            stage.name = "creditsmenu";
+            var startMenuBackground = new createjs.Bitmap(preload.getResult("background"));
+            stage.addChild(startMenuBackground);
+
             createjs.Ticker.addEventListener("tick", handleTick);
 
             stage.update();
