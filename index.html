@@ -135,8 +135,15 @@
                             meterCounter += 100;
                             firstLevel2();
                         }
+                        else if(target.parent.name == "skipButton" && stage.name == "secondlevel1"){
+                            meterCounter += 100;
+                            secondLevel2();
+                        }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel2"){
                             firstLevel3();
+                        }
+                        else if(target.parent.name == "skipButton" && stage.name == "secondlevel2"){
+                            secondLevel3();
                         }
                         else if(stage.name == "firstlevel2" && fibonacci < 3){
                             switch(target.name){
@@ -189,6 +196,86 @@
                                     meterCounter -= 50;
                                     if(meterCounter == 0)
                                         firstLevel1();
+                                    break;
+                            }
+                        }
+                        else if(stage.name == "secondlevel2" && fibonacci < 3){
+                            switch(target.name){
+                                case "aNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "aSharpNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "bNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "cNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "cSharpNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "dNoteBtn":
+                                    if(fibonacci == 1){
+                                        meterCounter += 250;
+                                        fibonacci = 2;
+                                        stage.getChildByName("boyContainer").getChildByName("rightBubbleSpeech").image = preload.getResult("d_bubble");
+                                        stage.getChildByName("girlContainer").visible = true;
+                                    }
+                                    else{
+                                        if(meterCounter == 940)
+                                            secondLevel1();
+                                    }
+                                    break;
+                                case "dSharpNoteBtn":
+                                    if(fibonacci == 2 && meterCounter > 1050){
+                                        meterCounter = 1580;
+                                        fibonacci = 3;
+                                        stage.getChildByName("girlContainer").getChildByName("leftBubbleSpeech").image = preload.getResult("dsharp_bubble");
+                                        addSkipButton();
+                                    }
+                                    else{
+                                        meterCounter -= 50;
+                                        fibonacci = 2;
+                                        if(meterCounter == 940)
+                                            secondLevel1();
+                                    }
+                                    break;
+                                case "eNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "fNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "fSharpNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "gNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
+                                    break;
+                                case "gSharpNoteBtn":
+                                    meterCounter -= 50;
+                                    if(meterCounter == 940)
+                                        secondLevel1();
                                     break;
                             }
                         }
@@ -744,6 +831,8 @@
 
             stage.name = "secondlevel1";
 
+            meterCounter = 940;
+
             createjs.Ticker.addEventListener("tick", handleTick);
 
             var secondLevelBackground = new createjs.Bitmap(preload.getResult("level2_kids"));
@@ -776,6 +865,323 @@
             stage.update();
         }
 
+        function addFlagsButtons() {
+            var gNoteBtn = new createjs.Shape();
+            gNoteBtn.name = "gNoteBtn";
+            gNoteBtn.graphics.beginFill("red").drawRect(0, 0, 35, 35);
+            gNoteBtn.alpha = 0.01;
+            gNoteBtn.rotation = 6;
+            gNoteBtn.x = 30;
+            gNoteBtn.y = 495;
+            gNoteBtn.cursor = "pointer";
+
+            gNoteBtn.on("click", handleMouseEvent);
+
+            var bNoteBtn = new createjs.Shape();
+            bNoteBtn.name = "bNoteBtn";
+            bNoteBtn.graphics.beginFill("red").drawRect(0, 0, 30, 35);
+            bNoteBtn.alpha = 0.01;
+            bNoteBtn.rotation = 2;
+            bNoteBtn.x = 80;
+            bNoteBtn.y = 485;
+            bNoteBtn.cursor = "pointer";
+
+            bNoteBtn.on("click", handleMouseEvent);
+
+            var cSharpNoteBtn = new createjs.Shape();
+            cSharpNoteBtn.name = "cSharpNoteBtn";
+            cSharpNoteBtn.graphics.beginFill("red").drawRect(0, 0, 30, 35);
+            cSharpNoteBtn.alpha = 0.01;
+            cSharpNoteBtn.rotation = 2;
+            cSharpNoteBtn.x = 120;
+            cSharpNoteBtn.y = 470;
+            cSharpNoteBtn.cursor = "pointer";
+
+            cSharpNoteBtn.on("click", handleMouseEvent);
+
+            var eNoteBtn = new createjs.Shape();
+            eNoteBtn.name = "eNoteBtn";
+            eNoteBtn.graphics.beginFill("red").drawRect(0, 0, 30, 35);
+            eNoteBtn.alpha = 0.01;
+            eNoteBtn.rotation = -9;
+            eNoteBtn.x = 150;
+            eNoteBtn.y = 450;
+            eNoteBtn.cursor = "pointer";
+
+            eNoteBtn.on("click", handleMouseEvent);
+
+            var dSharpNoteBtn = new createjs.Shape();
+            dSharpNoteBtn.name = "dSharpNoteBtn";
+            dSharpNoteBtn.graphics.beginFill("red").drawRect(0, 0, 25, 25);
+            dSharpNoteBtn.alpha = 0.01;
+            dSharpNoteBtn.rotation = -45;
+            dSharpNoteBtn.x = 175;
+            dSharpNoteBtn.y = 440;
+            dSharpNoteBtn.cursor = "pointer";
+
+            dSharpNoteBtn.on("click", handleMouseEvent);
+
+            var aSharpNoteBtn = new createjs.Shape();
+            aSharpNoteBtn.name = "aSharpNoteBtn";
+            aSharpNoteBtn.graphics.beginFill("red").drawRect(0, 0, 25, 25);
+            aSharpNoteBtn.alpha = 0.01;
+            aSharpNoteBtn.rotation = -45;
+            aSharpNoteBtn.x = 202;
+            aSharpNoteBtn.y = 420;
+            aSharpNoteBtn.cursor = "pointer";
+
+            aSharpNoteBtn.on("click", handleMouseEvent);
+
+            var cNoteBtn = new createjs.Shape();
+            cNoteBtn.name = "cNoteBtn";
+            cNoteBtn.graphics.beginFill("red").drawRect(0, 0, 45, 55);
+            cNoteBtn.alpha = 0.01;
+            cNoteBtn.rotation = -35;
+            cNoteBtn.x = 70;
+            cNoteBtn.y = 640;
+            cNoteBtn.cursor = "pointer";
+
+            cNoteBtn.on("click", handleMouseEvent);
+
+            var dSharpNoteBtn2 = new createjs.Shape();
+            dSharpNoteBtn2.name = "dSharpNoteBtn";
+            dSharpNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 45, 55);
+            dSharpNoteBtn2.alpha = 0.01;
+            dSharpNoteBtn2.rotation = -45;
+            dSharpNoteBtn2.x = 120;
+            dSharpNoteBtn2.y = 600;
+            dSharpNoteBtn2.cursor = "pointer";
+
+            dSharpNoteBtn2.on("click", handleMouseEvent);
+
+            var bNoteBtn2 = new createjs.Shape();
+            bNoteBtn2.name = "bNoteBtn";
+            bNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 35, 45);
+            bNoteBtn2.alpha = 0.01;
+            bNoteBtn2.rotation = -60;
+            bNoteBtn2.x = 165;
+            bNoteBtn2.y = 555;
+            bNoteBtn2.cursor = "pointer";
+
+            bNoteBtn2.on("click", handleMouseEvent);
+
+            var aNoteBtn = new createjs.Shape();
+            aNoteBtn.name = "aNoteBtn";
+            aNoteBtn.graphics.beginFill("red").drawRect(0, 0, 25, 35);
+            aNoteBtn.alpha = 0.01;
+            aNoteBtn.rotation = -60;
+            aNoteBtn.x = 195;
+            aNoteBtn.y = 505;
+            aNoteBtn.cursor = "pointer";
+
+            aNoteBtn.on("click", handleMouseEvent);
+
+            var eNoteBtn2 = new createjs.Shape();
+            eNoteBtn2.name = "eNoteBtn";
+            eNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 45, 35);
+            eNoteBtn2.alpha = 0.01;
+            eNoteBtn2.x = 230;
+            eNoteBtn2.y = 630;
+            eNoteBtn2.cursor = "pointer";
+
+            eNoteBtn2.on("click", handleMouseEvent);
+
+            var gNoteBtn2 = new createjs.Shape();
+            gNoteBtn2.name = "gNoteBtn";
+            gNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 55, 35);
+            gNoteBtn2.alpha = 0.01;
+            gNoteBtn2.x = 235;
+            gNoteBtn2.y = 585;
+            gNoteBtn2.cursor = "pointer";
+
+            gNoteBtn2.on("click", handleMouseEvent);
+
+            var aNoteBtn2 = new createjs.Shape();
+            aNoteBtn2.name = "aNoteBtn";
+            aNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 50, 25);
+            aNoteBtn2.alpha = 0.01;
+            aNoteBtn2.x = 235;
+            aNoteBtn2.y = 550;
+            aNoteBtn2.cursor = "pointer";
+
+            aNoteBtn2.on("click", handleMouseEvent);
+
+            var cNoteBtn2 = new createjs.Shape();
+            cNoteBtn2.name = "cNoteBtn";
+            cNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 35, 20);
+            cNoteBtn2.alpha = 0.01;
+            cNoteBtn2.x = 243;
+            cNoteBtn2.y = 512;
+            cNoteBtn2.cursor = "pointer";
+
+            cNoteBtn2.on("click", handleMouseEvent);
+
+            var aSharpNoteBtn2 = new createjs.Shape();
+            aSharpNoteBtn2.name = "aSharpNoteBtn";
+            aSharpNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 25, 20);
+            aSharpNoteBtn2.alpha = 0.01;
+            aSharpNoteBtn2.x = 245;
+            aSharpNoteBtn2.y = 480;
+            aSharpNoteBtn2.cursor = "pointer";
+
+            aSharpNoteBtn2.on("click", handleMouseEvent);
+
+            var fSharpNoteBtn = new createjs.Shape();
+            fSharpNoteBtn.name = "fSharpNoteBtn";
+            fSharpNoteBtn.graphics.beginFill("red").drawRect(0, 0, 50, 35);
+            fSharpNoteBtn.alpha = 0.01;
+            fSharpNoteBtn.rotation = -15;
+            fSharpNoteBtn.x = 335;
+            fSharpNoteBtn.y = 660;
+            fSharpNoteBtn.cursor = "pointer";
+
+            fSharpNoteBtn.on("click", handleMouseEvent);
+
+            var dNoteBtn = new createjs.Shape();
+            dNoteBtn.name = "dNoteBtn";
+            dNoteBtn.graphics.beginFill("red").drawRect(0, 0, 60, 40);
+            dNoteBtn.alpha = 0.01;
+            dNoteBtn.rotation = -45;
+            dNoteBtn.x = 320;
+            dNoteBtn.y = 615;
+            dNoteBtn.cursor = "pointer";
+
+            dNoteBtn.on("click", handleMouseEvent);
+
+            var gSharpNoteBtn = new createjs.Shape();
+            gSharpNoteBtn.name = "gSharpNoteBtn";
+            gSharpNoteBtn.graphics.beginFill("red").drawRect(0, 0, 45, 30);
+            gSharpNoteBtn.alpha = 0.01;
+            gSharpNoteBtn.rotation = -45;
+            gSharpNoteBtn.x = 305;
+            gSharpNoteBtn.y = 575;
+            gSharpNoteBtn.cursor = "pointer";
+
+            gSharpNoteBtn.on("click", handleMouseEvent);
+
+            var cNoteBtn3 = new createjs.Shape();
+            cNoteBtn3.name = "cNoteBtn";
+            cNoteBtn3.graphics.beginFill("red").drawRect(0, 0, 45, 30);
+            cNoteBtn3.alpha = 0.01;
+            cNoteBtn3.rotation = -45;
+            cNoteBtn3.x = 290;
+            cNoteBtn3.y = 540;
+            cNoteBtn3.cursor = "pointer";
+
+            cNoteBtn3.on("click", handleMouseEvent);
+
+            var fNoteBtn = new createjs.Shape();
+            fNoteBtn.name = "fNoteBtn";
+            fNoteBtn.graphics.beginFill("red").drawRect(0, 0, 40, 25);
+            fNoteBtn.alpha = 0.01;
+            fNoteBtn.rotation = -45;
+            fNoteBtn.x = 280;
+            fNoteBtn.y = 500;
+            fNoteBtn.cursor = "pointer";
+
+            fNoteBtn.on("click", handleMouseEvent);
+
+            var gNoteBtn3 = new createjs.Shape();
+            gNoteBtn3.name = "gNoteBtn";
+            gNoteBtn3.graphics.beginFill("red").drawRect(0, 0, 35, 25);
+            gNoteBtn3.alpha = 0.01;
+            gNoteBtn3.rotation = -35;
+            gNoteBtn3.x = 260;
+            gNoteBtn3.y = 460;
+            gNoteBtn3.cursor = "pointer";
+
+            gNoteBtn3.on("click", handleMouseEvent);
+
+            var bNoteBtn3 = new createjs.Shape();
+            bNoteBtn3.name = "bNoteBtn";
+            bNoteBtn3.graphics.beginFill("red").drawRect(0, 0, 30, 20);
+            bNoteBtn3.alpha = 0.01;
+            bNoteBtn3.rotation = -35;
+            bNoteBtn3.x = 253;
+            bNoteBtn3.y = 427;
+            bNoteBtn3.cursor = "pointer";
+
+            bNoteBtn3.on("click", handleMouseEvent);
+
+            var eNoteBtn3 = new createjs.Shape();
+            eNoteBtn3.name = "eNoteBtn";
+            eNoteBtn3.graphics.beginFill("red").drawRect(0, 0, 40, 30);
+            eNoteBtn3.alpha = 0.01;
+            eNoteBtn3.rotation = -35;
+            eNoteBtn3.x = 500;
+            eNoteBtn3.y = 628;
+            eNoteBtn3.cursor = "pointer";
+
+            eNoteBtn3.on("click", handleMouseEvent);
+
+            var aNoteBtn3 = new createjs.Shape();
+            aNoteBtn3.name = "aNoteBtn";
+            aNoteBtn3.graphics.beginFill("red").drawRect(0, 0, 50, 30);
+            aNoteBtn3.alpha = 0.01;
+            aNoteBtn3.rotation = -35;
+            aNoteBtn3.x = 455;
+            aNoteBtn3.y = 597;
+            aNoteBtn3.cursor = "pointer";
+
+            aNoteBtn3.on("click", handleMouseEvent);
+
+            var fSharpNoteBtn2 = new createjs.Shape();
+            fSharpNoteBtn2.name = "fSharpNoteBtn";
+            fSharpNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 50, 30);
+            fSharpNoteBtn2.alpha = 0.01;
+            fSharpNoteBtn2.rotation = -35;
+            fSharpNoteBtn2.x = 420;
+            fSharpNoteBtn2.y = 562;
+            fSharpNoteBtn2.cursor = "pointer";
+
+            fSharpNoteBtn2.on("click", handleMouseEvent);
+
+            var dSharpNoteBtn3 = new createjs.Shape();
+            dSharpNoteBtn3.name = "dSharpNoteBtn";
+            dSharpNoteBtn3.graphics.beginFill("red").drawRect(0, 0, 50, 30);
+            dSharpNoteBtn3.alpha = 0.01;
+            dSharpNoteBtn3.rotation = -35;
+            dSharpNoteBtn3.x = 390;
+            dSharpNoteBtn3.y = 535;
+            dSharpNoteBtn3.cursor = "pointer";
+
+            dSharpNoteBtn3.on("click", handleMouseEvent);
+
+            var fNoteBtn2 = new createjs.Shape();
+            fNoteBtn2.name = "fNoteBtn";
+            fNoteBtn2.graphics.beginFill("red").drawRect(0, 0, 40, 30);
+            fNoteBtn2.alpha = 0.01;
+            fNoteBtn2.rotation = -35;
+            fNoteBtn2.x = 360;
+            fNoteBtn2.y = 500;
+            fNoteBtn2.cursor = "pointer";
+
+            fNoteBtn2.on("click", handleMouseEvent);
+
+            var bNoteBtn4 = new createjs.Shape();
+            bNoteBtn4.name = "bNoteBtn";
+            bNoteBtn4.graphics.beginFill("red").drawRect(0, 0, 40, 30);
+            bNoteBtn4.alpha = 0.01;
+            bNoteBtn4.rotation = -45;
+            bNoteBtn4.x = 325;
+            bNoteBtn4.y = 465;
+            bNoteBtn4.cursor = "pointer";
+
+            bNoteBtn4.on("click", handleMouseEvent);
+
+            var cNoteBtn4 = new createjs.Shape();
+            cNoteBtn4.name = "cNoteBtn";
+            cNoteBtn4.graphics.beginFill("red").drawRect(0, 0, 35, 25);
+            cNoteBtn4.alpha = 0.01;
+            cNoteBtn4.rotation = -45;
+            cNoteBtn4.x = 300;
+            cNoteBtn4.y = 430;
+            cNoteBtn4.cursor = "pointer";
+
+            cNoteBtn4.on("click", handleMouseEvent);
+
+            stage.addChild(gNoteBtn, bNoteBtn, cSharpNoteBtn, eNoteBtn, dSharpNoteBtn, aSharpNoteBtn, cNoteBtn, dSharpNoteBtn2, bNoteBtn2, aNoteBtn, eNoteBtn2, gNoteBtn2, aNoteBtn2, aSharpNoteBtn2, cNoteBtn2, fSharpNoteBtn, dNoteBtn, gSharpNoteBtn, cNoteBtn3, fNoteBtn, gNoteBtn3, bNoteBtn3, eNoteBtn3, aNoteBtn3, fSharpNoteBtn2, dSharpNoteBtn3, fNoteBtn2, bNoteBtn4, cNoteBtn4);
+        }
         function secondLevel2(){
             clearStage();
 
@@ -791,39 +1197,68 @@
 
             var rightBubbleSpeech = new createjs.Bitmap(preload.getResult("question_mark_right"));
             rightBubbleSpeech.name = "rightBubbleSpeech";
-            rightBubbleSpeech.x = 83;
-            rightBubbleSpeech.y = 350;
+            rightBubbleSpeech.x = 545;
+            rightBubbleSpeech.y = 423;
             rightBubbleSpeech.scaleX = 0.17;
             rightBubbleSpeech.scaleY = 0.17;
 
-            stage.addChild(rightBubbleSpeech);
+            var boy = new createjs.Bitmap(preload.getResult("boy"));
+            boy.x = 500;
+            boy.y = 450;
+            boy.scaleX = 0.2;
+            boy.scaleY = 0.2;
+
+            var boyContainer = new createjs.Container();
+            boyContainer.name = "boyContainer";
+            boyContainer.addChild(boy, rightBubbleSpeech);
+
+            stage.addChild(boyContainer);
 
             //create invisible buttons for signs
-            addSignButtons();
+            addFlagsButtons();
 
             var leftBubbleSpeech = new createjs.Bitmap(preload.getResult("question_mark_left"));
             leftBubbleSpeech.name = "leftBubbleSpeech";
-            leftBubbleSpeech.x = 663;
-            leftBubbleSpeech.y = 412;
+            leftBubbleSpeech.x = 585;
+            leftBubbleSpeech.y = 565;
             leftBubbleSpeech.scaleX = 0.17;
             leftBubbleSpeech.scaleY = 0.17;
 
-            var blueBird = new createjs.Bitmap(preload.getResult("blue_bird"));
-            blueBird.x = 720;
-            blueBird.y = 450;
-            blueBird.scaleX = 0.1;
-            blueBird.scaleY = 0.1;
+            var girl = new createjs.Bitmap(preload.getResult("girl"));
+            girl.x = 610;
+            girl.y = 580;
+            girl.scaleX = 0.3;
+            girl.scaleY = 0.3;
 
-            var cSharpBird = new createjs.Container();
-            cSharpBird.name = "cSharpBird";
-            cSharpBird.addChild(blueBird, leftBubbleSpeech);
-            cSharpBird.visible = false;
-            stage.addChild(cSharpBird);
+            var girlContainer = new createjs.Container();
+            girlContainer.name = "girlContainer";
+            girlContainer.addChild(girl, leftBubbleSpeech);
+            girlContainer.visible = false;
+            stage.addChild(girlContainer);
 
             stage.update();
         }
 
+        function addTracksButtons() {
 
+        }
+        function firstLevel3(){
+            clearStage();
+
+            stage.name = "firstlevel3";
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+            startTime = (new Date()).getTime();
+
+            var firstLevel3Background = new createjs.Bitmap(preload.getResult("level1_houses"));
+            stage.addChild(firstLevel3Background);
+            stage.addChild(meterCounterTxt);
+            stage.addChild(timerTxt);
+
+            addTracksButtons();
+
+            stage.update();
+        }
         function selectionLevel(){
             clearStage();
 
@@ -852,7 +1287,7 @@
             secondLevel.on("mouseover", handleMouseEvent);
             secondLevel.on("mouseout", handleMouseEvent);
             secondLevel.on("click", handleMouseEvent);
-            
+
             stage.addChild(firstLevel, secondLevel);
 
             stage.update();
@@ -865,6 +1300,12 @@
             }
             if(birdSound != null){
                 birdSound.stop();
+            }
+            if(houseSound != null){
+                houseSound.stop();
+            }
+            if(kidSound != null){
+                kidSound.stop();
             }
             fibonacci = 1;
         }
