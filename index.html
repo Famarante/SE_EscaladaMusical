@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
-        var stage, preload, bird, startTime, timerTxt, bubbleSpeech, factor = 1, birdSound, fibonacci = 1, houseSound;
+        var stage, preload, bird, startTime, timerTxt, meterCounter = 0, meterCounterTxt, bubbleSpeech, factor = 1, fibonacci = 1;
+        var birdSound, houseSound;
         
         document.documentElement.style.overflow = 'hidden';  // firefox, chrome
         document.body.scroll = 'no'; // ie only
         
-        function handleResize() {
+        function handleResize(){
             stage.canvas.width = 1024;
             stage.canvas.height = 768;
             factor = 1;
+            var factorTmp;
             if(window.innerWidth < 1024){
-                var factorTmp = 1 - (1024 - window.innerWidth)/1024;
+                factorTmp = 1 - (1024 - window.innerWidth)/1024;
                 if(factorTmp < factor){
                     factor = factorTmp;
                 }
             }
             if(window.innerHeight < 768){
-                var factorTmp = 1 - (768 - window.innerHeight)/768;
+                factorTmp = 1 - (768 - window.innerHeight)/768;
                 if(factorTmp < factor){
                     factor = factorTmp;
                 }
@@ -46,19 +49,14 @@
             timerTxt.x = 855;
             timerTxt.y = 40;
 
-            var spriteSheet = new createjs.SpriteSheet({
-                framerate: 30,
-                "images": [preload.getResult("bird_sprite")],
-                "frames": {"height": 314, "count": 22, "width": 240, "regX": 157, "regY": 120},
-                // define two animations, run (loops, 1.5x speed) and jump (returns to run):
-                "animations": {
-                    "fly": [0, 21, "fly"]
-                }
-            });
-            
+            meterCounterTxt = new createjs.Text("Distância percorrida: " + meterCounter + " m", "bold 24px Arial", "#000000");
+            meterCounterTxt.name = "meterCounterTxt";
+            meterCounterTxt.textAlign = "left";
+            meterCounterTxt.textBaseline = "middle";
+            meterCounterTxt.x = 25;
+            meterCounterTxt.y = 40;
+
             handleResize();
-            
-            bird = new createjs.Sprite(spriteSheet, "fly");
 
             window.addEventListener("resize", handleResize);
             
@@ -67,16 +65,17 @@
 
         function init() {
             var manifest = [
-                {id: "a_sound", src: "assets/sounds/a_sound.wav"},
-                {id: "b_sound", src: "assets/sounds/b_sound.wav"},
-                {id: "c_sound", src: "assets/sounds/c_sound.wav"},
-                {id: "csharp_sound", src: "assets/sounds/csharp_sound.wav"},
-                {id: "d_sound", src: "assets/sounds/d_sound.wav"},
-                {id: "e_sound", src: "assets/sounds/e_sound.wav"},
-                {id: "f_sound", src: "assets/sounds/f_sound.wav"},
-                {id: "fsharp_sound", src: "assets/sounds/fsharp_sound.wav"},
-                {id: "g_sound", src: "assets/sounds/g_sound.wav"},
-                {id: "gsharp_sound", src: "assets/sounds/gsharp_sound.wav"},
+                {id: "a_sound", src: "assets/sounds/a_sound.mp3"},
+                {id: "b_sound", src: "assets/sounds/b_sound.mp3"},
+                {id: "c_sound", src: "assets/sounds/c_sound.mp3"},
+                {id: "csharp_sound", src: "assets/sounds/csharp_sound.mp3"},
+                {id: "d_sound", src: "assets/sounds/d_sound.mp3"},
+                {id: "dsharp_sound", src: "assets/sounds/dsharp_sound.mp3"},
+                {id: "e_sound", src: "assets/sounds/e_sound.mp3"},
+                {id: "f_sound", src: "assets/sounds/f_sound.mp3"},
+                {id: "fsharp_sound", src: "assets/sounds/fsharp_sound.mp3"},
+                {id: "g_sound", src: "assets/sounds/g_sound.mp3"},
+                {id: "gsharp_sound", src: "assets/sounds/gsharp_sound.mp3"},
                 {id: "bird_sprite", src: "assets/images/bird_sprite.png"},
                 {id: "background", src: "assets/images/background.png"},
                 {id: "start_menu_background", src: "assets/images/start_menu_background.png"},
@@ -87,7 +86,12 @@
                 {id: "level1_signs", src: "assets/images/level1_phase2_background.png"},
                 {id: "level1_houses", src: "assets/images/level1_phase3_background.png"},
                 {id: "red_bird", src: "assets/images/red_bird.png"},
-                {id: "blue_bird", src: "assets/images/blue_bird.png"}
+                {id: "blue_bird", src: "assets/images/blue_bird.png"},
+                {id: "c_bubble", src: "assets/images/c_bubble.png"},
+                {id: "csharp_bubble", src: "assets/images/csharp_bubble.png"},
+                {id: "pass_button", src: "assets/images/pass_button.png"},
+                {id: "question_mark_right", src: "assets/images/question_mark_right_bubble.png"},
+                {id: "question_mark_left", src: "assets/images/question_mark_left_bubble.png"}
             ];
             createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
 
@@ -102,11 +106,8 @@
             switch(evt.type){
                 case "mouseover":
                     if(stage.name == "firstlevel3"){
-                        console.log(target);
                         playSound(target.name);
                     }
-                    if(target.name == "buttonBackground")
-                        target.graphics.clear().beginFill("blue").drawRoundRect(0, 0, 256, 87, 20);
                     break;
                 case "click":
                         if(target.parent.name == "startButton") {
@@ -118,61 +119,76 @@
                         else if(target.parent.name == "rulesButton"){
                             alert("REGRAS");
                         }
-                        else if(target.parent.name == "skipButton" && target.parent.parent.name == "firstlevel1"){
+                        else if(target.parent.name == "skipButton" && stage.name == "firstlevel1"){
+                            meterCounter += 100;
                             firstLevel2();
                         }
-                        else if(stage.name = "firstlevel2"){
+                        else if(target.parent.name == "skipButton" && stage.name == "firstlevel2"){
+                            firstLevel3();
+                        }
+                        else if(stage.name == "firstlevel2" && fibonacci < 3){
                             switch(target.name){
                                 case "cSharpNoteBtn":
-                                    if(fibonacci == 2){
+                                    if(fibonacci == 2 && meterCounter > 100){
+                                        meterCounter = 500;
                                         fibonacci = 3;
-                                        stage.getChildByName("cSharpBird").getChildByName("bubbleSpeech2").getChildByName("bubbleText").text = "C#";
-                                        firstLevel3();
+                                        stage.getChildByName("cSharpBird").getChildByName("leftBubbleSpeech").image = preload.getResult("csharp_bubble");
                                     }
                                     else{
-                                        fibonacci = 1;
-                                        firstLevel1();
+                                        meterCounter -= 50;
+                                        fibonacci = 2;
+                                        if(meterCounter == 0)
+                                            firstLevel1();
                                     }
                                     break;
                                 case "fNoteBtn":
-                                    firstLevel1();
+                                    meterCounter -= 50;
+                                    if(meterCounter == 0)
+                                        firstLevel1();
                                     break;
                                 case "gNoteBtn":
-                                    firstLevel1();
+                                    meterCounter -= 50;
+                                    if(meterCounter == 0)
+                                        firstLevel1();
                                     break;
                                 case "dNoteBtn":
-                                    firstLevel1();
+                                    meterCounter -= 50;
+                                    if(meterCounter == 0)
+                                        firstLevel1();
                                     break;
                                 case "fSharpNoteBtn":
-                                    firstLevel1();
+                                    meterCounter -= 50;
+                                    if(meterCounter == 0)
+                                        firstLevel1();
                                     break;
                                 case "cNoteBtn":
                                     if(fibonacci == 1){
+                                        meterCounter += 200;
                                         fibonacci = 2;
+                                        stage.getChildByName("rightBubbleSpeech").image = preload.getResult("c_bubble");
+                                        stage.getChildByName("cSharpBird").visible = true;
                                     }
                                     else{
-                                        fibonacci = 1;
-                                        firstLevel1();
+                                        if(meterCounter == 0)
+                                            firstLevel1();
                                     }
-                                    bubbleSpeech.getChildByName("bubbleText").text = "C";
-                                    stage.getChildByName("cSharpBird").visible = true;
                                     break;
                                 case "aNoteBtn":
-                                    firstLevel1();
+                                    meterCounter -= 50;
+                                    if(meterCounter == 0)
+                                        firstLevel1();
                                     break;
                             }
                         }
                     break;
                 case "mouseout":
-                    if(target.name == "buttonBackground")
-                        target.graphics.clear().beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
                     break;
                 default:
                     break;
             }
             stage.update();
         }
-        function handleTick(event) {
+        function handleTick() {
             var currentTime = (new Date()).getTime();
 
             var time = Math.floor((currentTime-startTime)/1000);
@@ -182,37 +198,44 @@
             else{
                 timerTxt.text = "Tempo: " + time + "s";
             }
-            stage.update();
-            if(stage.name == "firstlevel1") {
-                if (birdSound.playState == createjs.Sound.PLAY_FINISHED && birdSound.src == "assets/sounds/c_sound.wav") {
-                    console.log(stage.getChildByName("cSharpBird").getChildByName("bubbleSpeech2"));
-                    stage.getChildByName("cSharpBird").getChildByName("bubbleSpeech2").visible = true;
-                    bubbleSpeech.visible = false;
-                    playSound("csharp_sound");
+            if(stage.name == "firstlevel2"){
+                if(meterCounter <= 100){
+                    stage.getChildByName("rightBubbleSpeech").image = preload.getResult("question_mark_right");
+                    stage.getChildByName("cSharpBird").visible = false;
+                    fibonacci = 1;
                 }
-                else if (birdSound.playState == createjs.Sound.PLAY_FINISHED && birdSound.src == "assets/sounds/csharp_sound.wav") {
-                    stage.getChildByName("cSharpBird").getChildByName("bubbleSpeech2").visible = false;
-                    bubbleSpeech.visible = true;
+                else if(meterCounter == 500 && fibonacci == 3){
+                    addSkipButton();
+                }
+            }
+            meterCounterTxt.text = "Distância percorrida: " + meterCounter + " m";
+            if(stage.name == "firstlevel1") {
+                if (birdSound.playState == createjs.Sound.PLAY_FINISHED && birdSound.src == "assets/sounds/c_sound.mp3") {
+                    stage.getChildByName("cSharpBird").getChildByName("cSharpBubbleSpeech").visible = true;
+                    stage.getChildByName("cBubbleSpeech").visible = false;
+                }
+                else if (birdSound.playState == createjs.Sound.PLAY_FINISHED && birdSound.src == "assets/sounds/csharp_sound.mp3") {
+                    stage.getChildByName("cSharpBird").getChildByName("cSharpBubbleSpeech").visible = false;
+                    stage.getChildByName("cBubbleSpeech").visible = true;
                     playSound("c_sound");
                 }
             }
+            stage.update();
         }
 
         function playSound(target) {
             //Play the sound: play (src, interrupt, delay, offset, loop, volume, pan)
             if(stage.name == "firstlevel1"){
                 var random = Math.floor((Math.random() * 4) + 1);
-                var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.1});
+                ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.1});
                 birdSound = createjs.Sound.play(target, ppc);
                 if (birdSound == null || birdSound.playState == createjs.Sound.PLAY_FAILED) {
-                    return;
                 }
             }
             else if(stage.name == "firstlevel3"){
                 var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: 1, volume: 0.1});
                 houseSound = createjs.Sound.play(target, ppc);
                 if (houseSound == null || houseSound.playState == createjs.Sound.PLAY_FAILED) {
-                    return;
                 }
             }
         }
@@ -245,8 +268,6 @@
 
             stage.addChild(startBtn);
 
-            startBtn.on("mouseover", handleMouseEvent);
-            startBtn.on("mouseout", handleMouseEvent);
             startBtn.on("click", handleMouseEvent);
 
             var rulesBtnBg = new createjs.Shape();
@@ -271,94 +292,79 @@
 
             stage.addChild(rulesBtn);
 
-            rulesBtn.on("mouseover", handleMouseEvent);
-            rulesBtn.on("mouseout", handleMouseEvent);
             rulesBtn.on("click", handleMouseEvent);
             
             createjs.Ticker.addEventListener("tick", handleTick);
 
             stage.update();
         }
-        function firstLevel1(){
-            clearStage();
 
-            var firstLevelBackground = new createjs.Bitmap(preload.getResult("level1_birds"));
-            stage.addChild(firstLevelBackground);
-
-            var bubbleSpeechImage = new createjs.Bitmap(preload.getResult("bubble"));
-            bubbleSpeechImage.scaleX = 0.03;
-            bubbleSpeechImage.scaleY = 0.03;
-
-            var bubbleSpeechTxt = new createjs.Text("C", "bold 34px Arial", "#000000");
-            bubbleSpeechTxt.name = "bubbleText";
-            bubbleSpeechTxt.textAlign = "center";
-            bubbleSpeechTxt.textBaseline = "middle";
-            bubbleSpeechTxt.x = 33;
-            bubbleSpeechTxt.y = 20;
-
-            bubbleSpeech = new createjs.Container();
-            bubbleSpeech.name = "bubbleSpeech";
-            bubbleSpeech.addChild(bubbleSpeechImage, bubbleSpeechTxt);
-            bubbleSpeech.x = 365;
-            bubbleSpeech.y = 420;
-            stage.addChild(bubbleSpeech);
-
-            stage.name = "firstlevel1";
-            createjs.Ticker.addEventListener("tick", handleTick);
-            startTime = (new Date()).getTime();
-            //stage.addChild(timerTxt);
-            playSound("c_sound");
-
-            var bubbleSpeechImage2 = new createjs.Bitmap(preload.getResult("bubble"));
-            bubbleSpeechImage2.scaleX = -0.03;
-            bubbleSpeechImage2.scaleY = 0.03;
-
-            var bubbleSpeechTxt2 = new createjs.Text("C#", "bold 34px Arial", "#000000");
-            bubbleSpeechTxt2.name = "bubbleText";
-            bubbleSpeechTxt2.textAlign = "center";
-            bubbleSpeechTxt2.textBaseline = "middle";
-            bubbleSpeechTxt2.x = -33;
-            bubbleSpeechTxt2.y = 20;
-
-            var bubbleSpeech2 = new createjs.Container();
-            bubbleSpeech2.name = "bubbleSpeech2";
-            bubbleSpeech2.addChild(bubbleSpeechImage2, bubbleSpeechTxt2);
-            bubbleSpeech2.x = 732;
-            bubbleSpeech2.y = 418;
-            bubbleSpeech2.visible = false;
-            var blueBird = new createjs.Bitmap(preload.getResult("blue_bird"));
-            blueBird.x = 800;
-            blueBird.y = 450;
-            blueBird.scaleX = -0.1;
-            blueBird.scaleY = 0.1;
-
-            var cSharpBird = new createjs.Container();
-            cSharpBird.name = "cSharpBird";
-            cSharpBird.addChild(blueBird, bubbleSpeech2);
-            stage.addChild(cSharpBird);
-
+        function addSkipButton() {
             var skipBtnBg = new createjs.Shape();
-            skipBtnBg.name = "buttonBackground";
+            skipBtnBg.name = "skipButtonBackground";
             skipBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
+            skipBtnBg.alpha = 0.01;
 
-            var skipBtnTxt = new createjs.Text("Passar", "bold 48px Arial", "#FFFFFF");
-            skipBtnTxt.name = "buttonText";
-            skipBtnTxt.textAlign = "center";
-            skipBtnTxt.textBaseline = "middle";
-            skipBtnTxt.x = 256/2;
-            skipBtnTxt.y = 87/2;
+            var skipBtnImage = new createjs.Bitmap(preload.getResult("pass_button"));
+            skipBtnImage.name = "skipButtonImage";
+            skipBtnImage.x = 740;
+            skipBtnImage.y = 650;
 
             var skipBtn = new createjs.Container();
             skipBtn.name = "skipButton";
             skipBtn.x = 740;
             skipBtn.y = 650;
-            skipBtn.addChild(skipBtnBg, skipBtnTxt);
-            
+            skipBtn.addChild(skipBtnBg);
+
             skipBtn.on("click", handleMouseEvent);
 
             skipBtn.cursor = "pointer";
 
-            stage.addChild(skipBtn);
+            stage.addChild(skipBtn, skipBtnImage);
+        }
+        function firstLevel1(){
+            clearStage();
+
+            stage.name = "firstlevel1";
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+
+            var firstLevelBackground = new createjs.Bitmap(preload.getResult("level1_birds"));
+            stage.addChild(firstLevelBackground);
+            stage.addChild(meterCounterTxt);
+
+            var cBubbleSpeech = new createjs.Bitmap(preload.getResult("c_bubble"));
+            cBubbleSpeech.name = "cBubbleSpeech";
+            cBubbleSpeech.x = 365;
+            cBubbleSpeech.y = 418;
+            cBubbleSpeech.scaleX = 0.17;
+            cBubbleSpeech.scaleY = 0.17;
+
+            stage.addChild(cBubbleSpeech);
+
+            playSound("c_sound");
+
+            var cSharpBubbleSpeech = new createjs.Bitmap(preload.getResult("csharp_bubble"));
+            cSharpBubbleSpeech.name = "cSharpBubbleSpeech";
+            cSharpBubbleSpeech.x = 663;
+            cSharpBubbleSpeech.y = 412;
+            cSharpBubbleSpeech.scaleX = 0.17;
+            cSharpBubbleSpeech.scaleY = 0.17;
+            cSharpBubbleSpeech.visible = false;
+
+            var blueBird = new createjs.Bitmap(preload.getResult("blue_bird"));
+            blueBird.x = 720;
+            blueBird.y = 450;
+            blueBird.scaleX = 0.1;
+            blueBird.scaleY = 0.1;
+
+            var cSharpBird = new createjs.Container();
+            cSharpBird.name = "cSharpBird";
+            cSharpBird.addChild(blueBird, cSharpBubbleSpeech);
+            stage.addChild(cSharpBird);
+
+            addSkipButton();
+
             stage.update();
         }
         function addSignButtons(){
@@ -430,61 +436,47 @@
 
         function firstLevel2(){
             clearStage();
+
+            stage.name = "firstlevel2";
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+            startTime = (new Date()).getTime();
+
             var firstLevel2Background = new createjs.Bitmap(preload.getResult("level1_signs"));
             stage.addChild(firstLevel2Background);
+            stage.addChild(meterCounterTxt);
+            stage.addChild(timerTxt);
 
-            var bubbleSpeechImage = new createjs.Bitmap(preload.getResult("bubble"));
-            bubbleSpeechImage.scaleX = 0.03;
-            bubbleSpeechImage.scaleY = 0.03;
+            var rightBubbleSpeech = new createjs.Bitmap(preload.getResult("question_mark_right"));
+            rightBubbleSpeech.name = "rightBubbleSpeech";
+            rightBubbleSpeech.x = 83;
+            rightBubbleSpeech.y = 350;
+            rightBubbleSpeech.scaleX = 0.17;
+            rightBubbleSpeech.scaleY = 0.17;
 
-            var bubbleSpeechTxt = new createjs.Text("?", "bold 34px Arial", "#000000");
-            bubbleSpeechTxt.name = "bubbleText";
-            bubbleSpeechTxt.textAlign = "center";
-            bubbleSpeechTxt.textBaseline = "middle";
-            bubbleSpeechTxt.x = 33;
-            bubbleSpeechTxt.y = 20;
-
-            bubbleSpeech = new createjs.Container();
-            bubbleSpeech.addChild(bubbleSpeechImage, bubbleSpeechTxt);
-            bubbleSpeech.x = 83;
-            bubbleSpeech.y = 350;
-            stage.addChild(bubbleSpeech);
+            stage.addChild(rightBubbleSpeech);
 
             //create invisible buttons for signs
             addSignButtons();
 
-            var bubbleSpeechImage2 = new createjs.Bitmap(preload.getResult("bubble"));
-            bubbleSpeechImage2.scaleX = -0.03;
-            bubbleSpeechImage2.scaleY = 0.03;
+            var leftBubbleSpeech = new createjs.Bitmap(preload.getResult("question_mark_left"));
+            leftBubbleSpeech.name = "leftBubbleSpeech";
+            leftBubbleSpeech.x = 663;
+            leftBubbleSpeech.y = 412;
+            leftBubbleSpeech.scaleX = 0.17;
+            leftBubbleSpeech.scaleY = 0.17;
 
-            var bubbleSpeechTxt2 = new createjs.Text("?", "bold 34px Arial", "#000000");
-            bubbleSpeechTxt2.name = "bubbleText";
-            bubbleSpeechTxt2.textAlign = "center";
-            bubbleSpeechTxt2.textBaseline = "middle";
-            bubbleSpeechTxt2.x = -33;
-            bubbleSpeechTxt2.y = 20;
-
-            var bubbleSpeech2 = new createjs.Container();
-            bubbleSpeech2.name = "bubbleSpeech2";
-            bubbleSpeech2.addChild(bubbleSpeechImage2, bubbleSpeechTxt2);
-            bubbleSpeech2.x = 732;
-            bubbleSpeech2.y = 418;
             var blueBird = new createjs.Bitmap(preload.getResult("blue_bird"));
-            blueBird.x = 800;
+            blueBird.x = 720;
             blueBird.y = 450;
-            blueBird.scaleX = -0.1;
+            blueBird.scaleX = 0.1;
             blueBird.scaleY = 0.1;
 
             var cSharpBird = new createjs.Container();
             cSharpBird.name = "cSharpBird";
-            cSharpBird.addChild(blueBird, bubbleSpeech2);
+            cSharpBird.addChild(blueBird, leftBubbleSpeech);
             cSharpBird.visible = false;
             stage.addChild(cSharpBird);
-
-            stage.name = "firstlevel2";
-            createjs.Ticker.addEventListener("tick", handleTick);
-            startTime = (new Date()).getTime();
-            stage.addChild(timerTxt);
 
             stage.update();
         }
@@ -615,14 +607,18 @@
         }
         function firstLevel3(){
             clearStage();
+
             stage.name = "firstlevel3";
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+            startTime = (new Date()).getTime();
+
             var firstLevel3Background = new createjs.Bitmap(preload.getResult("level1_houses"));
             stage.addChild(firstLevel3Background);
+            stage.addChild(meterCounterTxt);
+            stage.addChild(timerTxt);
 
             addHousesButtons();
-
-            startTime = (new Date()).getTime();
-            stage.addChild(timerTxt);
 
             stage.update();
         }
