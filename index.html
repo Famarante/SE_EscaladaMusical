@@ -5,7 +5,7 @@
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
         var stage, preload, bird, startTime, timerTxt, meterCounter = 0, meterCounterTxt, bubbleSpeech, factor = 1, fibonacci = 1;
-        var birdSound, houseSound;
+        var birdSound, houseSound, kidSound;
         
         document.documentElement.style.overflow = 'hidden';  // firefox, chrome
         document.body.scroll = 'no'; // ie only
@@ -76,22 +76,31 @@
                 {id: "fsharp_sound", src: "assets/sounds/fsharp_sound.mp3"},
                 {id: "g_sound", src: "assets/sounds/g_sound.mp3"},
                 {id: "gsharp_sound", src: "assets/sounds/gsharp_sound.mp3"},
-                {id: "bird_sprite", src: "assets/images/bird_sprite.png"},
                 {id: "background", src: "assets/images/background.png"},
                 {id: "start_menu_background", src: "assets/images/start_menu_background.png"},
                 {id: "selection_level_background", src: "assets/images/selection_level_background.png"},
-                {id: "bubble", src: "assets/images/bubble.png"},
-                {id: "level1_background", src: "assets/images/level1_background.png"},
-                {id: "level1_birds", src: "assets/images/level1_phase1_background.png"},
-                {id: "level1_signs", src: "assets/images/level1_phase2_background.png"},
-                {id: "level1_houses", src: "assets/images/level1_phase3_background.png"},
-                {id: "red_bird", src: "assets/images/red_bird.png"},
-                {id: "blue_bird", src: "assets/images/blue_bird.png"},
-                {id: "c_bubble", src: "assets/images/c_bubble.png"},
-                {id: "csharp_bubble", src: "assets/images/csharp_bubble.png"},
                 {id: "pass_button", src: "assets/images/pass_button.png"},
                 {id: "question_mark_right", src: "assets/images/question_mark_right_bubble.png"},
-                {id: "question_mark_left", src: "assets/images/question_mark_left_bubble.png"}
+                {id: "question_mark_left", src: "assets/images/question_mark_left_bubble.png"},
+                //LEVEL 1 ITEMS
+                {id: "level1_background", src: "assets/images/level1/background.png"},
+                {id: "level1_birds", src: "assets/images/level1/phase1_background.png"},
+                {id: "level1_signs", src: "assets/images/level1/phase2_background.png"},
+                {id: "level1_houses", src: "assets/images/level1/phase3_background.png"},
+                {id: "red_bird", src: "assets/images/level1/red_bird.png"},
+                {id: "blue_bird", src: "assets/images/level1/blue_bird.png"},
+                {id: "c_bubble", src: "assets/images/level1/c_bubble.png"},
+                {id: "csharp_bubble", src: "assets/images/level1/csharp_bubble.png"},
+                //LEVEL 2 ITEMS
+                {id: "level2_background", src: "assets/images/level2/background.png"},
+                {id: "level2_kids", src: "assets/images/level2/phase1_background.png"},
+                {id: "level2_flags", src: "assets/images/level2/phase2_background.png"},
+                {id: "level2_tracks", src: "assets/images/level2/phase3_background.png"},
+                {id: "boy", src: "assets/images/level2/boy.png"},
+                {id: "girl", src: "assets/images/level2/girl.png"},
+                {id: "d_bubble", src: "assets/images/level2/d_bubble.png"},
+                {id: "dsharp_bubble", src: "assets/images/level2/dsharp_bubble.png"}
+
             ];
             createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
 
@@ -113,8 +122,11 @@
                         if(target.parent.name == "startButton") {
                             selectionLevel();
                         }
-                        else if(target.name == "firstLevel"){
+                        else if(target.name == "firstLevel" && stage.name == "selectionLevel"){
                             firstLevel1();
+                        }
+                        else if(target.name == "secondLevel" && stage.name == "selectionLevel"){
+                            secondLevel1();
                         }
                         else if(target.parent.name == "rulesButton"){
                             alert("REGRAS");
@@ -300,6 +312,18 @@
                         addSkipButton();
                     }
                     break;
+                case "secondlevel1":
+                    if (kidSound.playState == createjs.Sound.PLAY_FINISHED && kidSound.src == "assets/sounds/d_sound.mp3") {
+                        stage.getChildByName("dSharpBubbleSpeech").visible = true;
+                        stage.getChildByName("dBubbleSpeech").visible = false;
+                        playSound("dsharp_sound");
+                    }
+                    else if (kidSound.playState == createjs.Sound.PLAY_FINISHED && kidSound.src == "assets/sounds/dsharp_sound.mp3") {
+                        stage.getChildByName("dSharpBubbleSpeech").visible = false;
+                        stage.getChildByName("dBubbleSpeech").visible = true;
+                        playSound("d_sound");
+                    }
+                    break;
             }
             meterCounterTxt.text = "Distância percorrida: " + meterCounter + " m";
 
@@ -308,18 +332,27 @@
 
         function playSound(target) {
             //Play the sound: play (src, interrupt, delay, offset, loop, volume, pan)
-            if(stage.name == "firstlevel1"){
-                var random = Math.floor((Math.random() * 4) + 1);
-                ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.1});
-                birdSound = createjs.Sound.play(target, ppc);
-                if (birdSound == null || birdSound.playState == createjs.Sound.PLAY_FAILED) {
-                }
-            }
-            else if(stage.name == "firstlevel3"){
-                var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: 1, volume: 0.1});
-                houseSound = createjs.Sound.play(target, ppc);
-                if (houseSound == null || houseSound.playState == createjs.Sound.PLAY_FAILED) {
-                }
+            switch (stage.name){
+                case "firstlevel1":
+                    var random = Math.floor((Math.random() * 3) + 1);
+                    ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.1});
+                    birdSound = createjs.Sound.play(target, ppc);
+                    if (birdSound == null || birdSound.playState == createjs.Sound.PLAY_FAILED) {
+                    }
+                    break;
+                case "firstlevel3":
+                    var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: 1, volume: 0.1});
+                    houseSound = createjs.Sound.play(target, ppc);
+                    if (houseSound == null || houseSound.playState == createjs.Sound.PLAY_FAILED) {
+                    }
+                    break;
+                case "secondlevel1":
+                    var random = Math.floor((Math.random() * 3) + 1);
+                    ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.1});
+                    kidSound = createjs.Sound.play(target, ppc);
+                    if (kidSound == null || kidSound.playState == createjs.Sound.PLAY_FAILED) {
+                    }
+                    break;
             }
         }
         function handleLoad(event) {
@@ -706,6 +739,43 @@
             stage.update();
         }
 
+        function secondLevel1(){
+            clearStage();
+
+            stage.name = "secondlevel1";
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+
+            var secondLevelBackground = new createjs.Bitmap(preload.getResult("level2_kids"));
+            stage.addChild(secondLevelBackground);
+            stage.addChild(meterCounterTxt);
+
+            var dBubbleSpeech = new createjs.Bitmap(preload.getResult("d_bubble"));
+            dBubbleSpeech.name = "dBubbleSpeech";
+            dBubbleSpeech.x = 455;
+            dBubbleSpeech.y = 450;
+            dBubbleSpeech.scaleX = 0.17;
+            dBubbleSpeech.scaleY = 0.17;
+
+            stage.addChild(dBubbleSpeech);
+
+            playSound("d_sound");
+
+            var dSharpBubbleSpeech = new createjs.Bitmap(preload.getResult("dsharp_bubble"));
+            dSharpBubbleSpeech.name = "dSharpBubbleSpeech";
+            dSharpBubbleSpeech.x = 580;
+            dSharpBubbleSpeech.y = 513;
+            dSharpBubbleSpeech.scaleX = 0.17;
+            dSharpBubbleSpeech.scaleY = 0.17;
+            dSharpBubbleSpeech.visible = false;
+
+            stage.addChild(dSharpBubbleSpeech);
+
+            addSkipButton();
+
+            stage.update();
+        }
+
         function selectionLevel(){
             clearStage();
 
@@ -723,7 +793,18 @@
             firstLevel.on("mouseover", handleMouseEvent);
             firstLevel.on("mouseout", handleMouseEvent);
             firstLevel.on("click", handleMouseEvent);
-            stage.addChild(firstLevel);
+
+            var secondLevel = new createjs.Shape();
+            secondLevel.graphics.beginFill("red").drawRoundRect(0, 0, 250, 35, 10);
+            secondLevel.x = 360;
+            secondLevel.y = 670;
+            secondLevel.alpha = 0.01;
+            secondLevel.cursor = "pointer";
+            secondLevel.name = "secondLevel";
+            secondLevel.on("mouseover", handleMouseEvent);
+            secondLevel.on("mouseout", handleMouseEvent);
+            secondLevel.on("click", handleMouseEvent);
+            stage.addChild(secondLevel);
 
 
             stage.update();
