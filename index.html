@@ -273,6 +273,7 @@
                     if (birdSound.playState == createjs.Sound.PLAY_FINISHED && birdSound.src == "assets/sounds/c_sound.mp3") {
                         stage.getChildByName("cSharpBird").getChildByName("cSharpBubbleSpeech").visible = true;
                         stage.getChildByName("cBubbleSpeech").visible = false;
+                        playSound("csharp_sound");
                     }
                     else if (birdSound.playState == createjs.Sound.PLAY_FINISHED && birdSound.src == "assets/sounds/csharp_sound.mp3") {
                         stage.getChildByName("cSharpBird").getChildByName("cSharpBubbleSpeech").visible = false;
