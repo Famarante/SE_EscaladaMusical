@@ -776,6 +776,54 @@
             stage.update();
         }
 
+        function secondLevel2(){
+            clearStage();
+
+            stage.name = "secondlevel2";
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+            startTime = (new Date()).getTime();
+
+            var secondLevel2Background = new createjs.Bitmap(preload.getResult("level2_flags"));
+            stage.addChild(secondLevel2Background);
+            stage.addChild(meterCounterTxt);
+            stage.addChild(timerTxt);
+
+            var rightBubbleSpeech = new createjs.Bitmap(preload.getResult("question_mark_right"));
+            rightBubbleSpeech.name = "rightBubbleSpeech";
+            rightBubbleSpeech.x = 83;
+            rightBubbleSpeech.y = 350;
+            rightBubbleSpeech.scaleX = 0.17;
+            rightBubbleSpeech.scaleY = 0.17;
+
+            stage.addChild(rightBubbleSpeech);
+
+            //create invisible buttons for signs
+            addSignButtons();
+
+            var leftBubbleSpeech = new createjs.Bitmap(preload.getResult("question_mark_left"));
+            leftBubbleSpeech.name = "leftBubbleSpeech";
+            leftBubbleSpeech.x = 663;
+            leftBubbleSpeech.y = 412;
+            leftBubbleSpeech.scaleX = 0.17;
+            leftBubbleSpeech.scaleY = 0.17;
+
+            var blueBird = new createjs.Bitmap(preload.getResult("blue_bird"));
+            blueBird.x = 720;
+            blueBird.y = 450;
+            blueBird.scaleX = 0.1;
+            blueBird.scaleY = 0.1;
+
+            var cSharpBird = new createjs.Container();
+            cSharpBird.name = "cSharpBird";
+            cSharpBird.addChild(blueBird, leftBubbleSpeech);
+            cSharpBird.visible = false;
+            stage.addChild(cSharpBird);
+
+            stage.update();
+        }
+
+
         function selectionLevel(){
             clearStage();
 
@@ -804,8 +852,8 @@
             secondLevel.on("mouseover", handleMouseEvent);
             secondLevel.on("mouseout", handleMouseEvent);
             secondLevel.on("click", handleMouseEvent);
-            stage.addChild(secondLevel);
-
+            
+            stage.addChild(firstLevel, secondLevel);
 
             stage.update();
         }
