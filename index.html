@@ -414,6 +414,7 @@
             }
             stage.update();
         }
+
         function handleTick() {
             var currentTime = (new Date()).getTime();
             var timeTemp;
@@ -593,8 +594,10 @@
                     break;
             }
         }
+
         function handleLoad(event) {
         }
+
         function startMenuLevel(){
             stage.name = "startMenuLevel";
 
@@ -1059,6 +1062,7 @@
 
             stage.addChild(cSharpNoteBtn, fNoteBtn, gNoteBtn, dNoteBtn, fSharpNoteBtn, cNoteBtn, aNoteBtn, bNoteBtn, eNoteBtn, dSharpNoteBtn, gSharpNoteBtn);
         }
+
         function firstLevel3(){
             stage.name = "firstlevel3";
 
@@ -1087,6 +1091,7 @@
 
             stage.update();
         }
+
         function secondLevelIntro(){
             stage.name = "secondlevelintro";
 
@@ -1597,6 +1602,7 @@
 
             stage.addChild(cSharpNoteBtn, gNoteBtn, dNoteBtn, bNoteBtn, eNoteBtn, dSharpNoteBtn);
         }
+
         function secondLevel3(){
             stage.name = "secondlevel3";
 
@@ -1625,6 +1631,7 @@
 
             stage.update();
         }
+
         function selectionLevel(){
             stage.name = "selectionLevel";
 
@@ -1667,6 +1674,7 @@
 
             stage.update();
         }
+
         function clearStage(){
             for(var i = 0; i < stage.numChildren; i++){
                 stage.removeChildAt(i);
