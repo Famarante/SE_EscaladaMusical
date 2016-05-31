@@ -5,7 +5,7 @@
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
         var stage, preload, bird, startTime, timerTxt, meterCounter = 0, meterCounterTxt, bubbleSpeech, factor = 1, fibonacci = 1, wait = 3, _startTime;
-        var birdSound, houseSound, kidSound, trackSound;
+        var birdSound, houseSound, kidSound, trackSound, introSound;
         
         document.documentElement.style.overflow = 'hidden';  // firefox, chrome
         document.body.scroll = 'no'; // ie only
@@ -76,6 +76,7 @@
                 {id: "fsharp_sound", src: "assets/sounds/fsharp_sound.mp3"},
                 {id: "g_sound", src: "assets/sounds/g_sound.mp3"},
                 {id: "gsharp_sound", src: "assets/sounds/gsharp_sound.mp3"},
+                {id: "intro", src: "assets/sounds/intro.mp3"},
                 {id: "background", src: "assets/images/background.png"},
                 {id: "start_menu_background", src: "assets/images/start_menu_background.png"},
                 {id: "selection_level_background", src: "assets/images/selection_level_background.png"},
@@ -525,6 +526,12 @@
         function playSound(target) {
             //Play the sound: play (src, interrupt, delay, offset, loop, volume, pan)
             var random, ppc;
+            if(stage.name == "startMenuLevel" || stage.name == "rulesmenu" || stage.name == "creditsmenu" || stage.name == "selectionLevel"){
+                ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: -1, volume: 0.1});
+                introSound = createjs.Sound.play(target, ppc);
+                if (introSound == null || introSound.playState == createjs.Sound.PLAY_FAILED) {
+                }
+            }
             switch (stage.name){
                 case "firstlevel1":
                     random = Math.floor((Math.random() * 3) + 1);
@@ -560,6 +567,9 @@
             stage.name = "startMenuLevel";
             var startMenuBackground = new createjs.Bitmap(preload.getResult("start_menu_background"));
             stage.addChild(startMenuBackground);
+
+            if(introSound == null)
+                playSound("intro");
 
             var rulesBtn = new createjs.Shape();
             rulesBtn.name = "rulesButton";
@@ -1592,6 +1602,9 @@
             }
             if(trackSound != null){
                 kidSound.stop();
+            }
+            if(introSound != null && !(stage.name == "startMenuLevel" || stage.name == "rulesmenu" || stage.name == "creditsmenu" || stage.name == "selectionLevel")){
+                introSound.stop();
             }
             if(fibonacci == 3)
                 fibonacci = 1;
