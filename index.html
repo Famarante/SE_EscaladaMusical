@@ -648,8 +648,9 @@
         function addSkipButton() {
             var skipBtnImage = new createjs.Bitmap(preload.getResult("skip_button"));
             skipBtnImage.name = "skipButtonImage";
-            skipBtnImage.x = 740;
-            skipBtnImage.y = 650;
+            skipBtnImage.x = 830;
+            skipBtnImage.y = 683;
+            skipBtnImage.scaleX = skipBtnImage.scaleY = 0.62;
 
             var skipBtn = new createjs.Container();
             skipBtn.name = "skipButton";
@@ -684,6 +685,7 @@
         function addBackButton(x, y) {
             var backBtnImage = new createjs.Bitmap(preload.getResult("back_button"));
             backBtnImage.name = "backButtonImage";
+            backBtnImage.scaleX = backBtnImage.scaleY = 0.62;
 
             var backBtn = new createjs.Container();
             backBtn.name = "backButton";
@@ -876,7 +878,7 @@
             cSharpBird.visible = false;
             stage.addChild(cSharpBird);
 
-            addBackButton(26, 650);
+            addBackButton(34, 683);
             addHintButton();
 
             stage.update();
@@ -1029,7 +1031,7 @@
 
             addHousesButtons();
 
-            addBackButton(26, 650);
+            addBackButton(34, 683);
             addHintButton();
 
             stage.update();
@@ -1569,7 +1571,7 @@
                 stage.addChild(secondLevel);
             }
 
-            addBackButton(740, 650);
+            addBackButton(830, 683);
 
             stage.update();
         }
