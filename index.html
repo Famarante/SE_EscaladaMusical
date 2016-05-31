@@ -161,7 +161,7 @@
                             secondLevel3();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel3"){
-                            secondLevel1();
+                            selectionLevel();
                         }
                         else if(stage.name == "firstlevel2" && fibonacci < 3){
                             switch(target.name){
@@ -1471,7 +1471,10 @@
             secondLevel.on("mouseout", handleMouseEvent);
             secondLevel.on("click", handleMouseEvent);
 
-            stage.addChild(firstLevel, secondLevel);
+            stage.addChild(firstLevel);
+            if(meterCounter == 940){
+                stage.addChild(secondLevel);
+            }
 
             stage.update();
         }
