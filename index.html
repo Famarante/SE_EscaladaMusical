@@ -666,12 +666,12 @@
         function addHintButton() {
             var hintBtnImage = new createjs.Bitmap(preload.getResult("hint"));
             hintBtnImage.name = "hintButtonImage";
-            hintBtnImage.scaleX = hintBtnImage.scaleY = 0.1;
+            hintBtnImage.scaleX = hintBtnImage.scaleY = 0.07;
 
             var hintBtn = new createjs.Container();
             hintBtn.name = "hintButton";
-            hintBtn.x = 625;
-            hintBtn.y = 640;
+            hintBtn.x = 760;
+            hintBtn.y = 675;
             hintBtn.addChild(hintBtnImage);
 
             hintBtn.on("mouseover", handleMouseEvent);
