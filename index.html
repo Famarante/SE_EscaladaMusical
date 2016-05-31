@@ -124,6 +124,8 @@
             var target = evt.target;
             switch(evt.type){
                 case "mouseover":
+                        console.log(target);
+                        console.log(stage);
                     if(stage.name == "firstlevel3") {
                         playSound(target.name);
                     }
