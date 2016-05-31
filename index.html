@@ -83,6 +83,8 @@
                 {id: "question_mark_right", src: "assets/images/question_mark_right_bubble.png"},
                 {id: "question_mark_left", src: "assets/images/question_mark_left_bubble.png"},
                 {id: "wrror", src: "assets/images/error.png"},
+                {id: "credits", src: "assets/images/credits.png"},
+                {id: "rules", src: "assets/images/rules.png"},
                 //LEVEL 1 ITEMS
                 {id: "level1_background", src: "assets/images/level1/background.png"},
                 {id: "level1_birds", src: "assets/images/level1/phase1_background.png"},
@@ -145,6 +147,9 @@
                         }
                         else if(target.name == "creditsButton"){
                             creditsMenu();
+                        }
+                        else if(target.name == "backButton" && (stage.name == "creditsmenu" || stage.name == "rulesmenu")){
+                            startMenuLevel();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel1"){
                             meterCounter += 100;
@@ -475,6 +480,7 @@
                     break;
                 case "secondlevel3":
                     if(meterCounter <= 1190){
+                        //stage.getChildByName("secondLevel3Info").image = preload.getResult("wrror");
                         secondLevel2();
                         fibonacci = 2;
                     }
@@ -569,10 +575,21 @@
             clearStage();
 
             stage.name = "rulesmenu";
-            var startMenuBackground = new createjs.Bitmap(preload.getResult("background"));
-            stage.addChild(startMenuBackground);
+            var rulesMenuBackground = new createjs.Bitmap(preload.getResult("rules"));
+
+            var backBtn = new createjs.Shape();
+            backBtn.name = "backButton";
+            backBtn.x = 830;
+            backBtn.y = 683;
+            backBtn.graphics.beginFill("red").drawRoundRect(0, 0, 160, 55, 10);
+            backBtn.alpha = 0.01;
+
+            backBtn.on("click", handleMouseEvent);
+            backBtn.cursor = "pointer";
 
             createjs.Ticker.addEventListener("tick", handleTick);
+
+            stage.addChild(rulesMenuBackground, backBtn);
 
             stage.update();
         }
@@ -581,10 +598,21 @@
             clearStage();
 
             stage.name = "creditsmenu";
-            var startMenuBackground = new createjs.Bitmap(preload.getResult("background"));
-            stage.addChild(startMenuBackground);
+            var creditsMenuBackground = new createjs.Bitmap(preload.getResult("credits"));
+
+            var backBtn = new createjs.Shape();
+            backBtn.name = "backButton";
+            backBtn.x = 830;
+            backBtn.y = 683;
+            backBtn.graphics.beginFill("red").drawRoundRect(0, 0, 160, 55, 10);
+            backBtn.alpha = 0.01;
+
+            backBtn.on("click", handleMouseEvent);
+            backBtn.cursor = "pointer";
 
             createjs.Ticker.addEventListener("tick", handleTick);
+
+            stage.addChild(creditsMenuBackground, backBtn);
 
             stage.update();
         }
