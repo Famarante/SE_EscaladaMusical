@@ -110,8 +110,12 @@
                 {id: "boy", src: "assets/images/level2/boy.png"},
                 {id: "girl", src: "assets/images/level2/girl.png"},
                 {id: "d_bubble", src: "assets/images/level2/d_bubble.png"},
-                {id: "dsharp_bubble", src: "assets/images/level2/dsharp_bubble.png"}
-
+                {id: "dsharp_bubble", src: "assets/images/level2/dsharp_bubble.png"},
+                {id: "level2_intro", src: "assets/images/level2/intro.png"},
+                {id: "level2_phase2_instructions", src: "assets/images/level2/phase2_instructions.png"},
+                {id: "level2_phase2_win", src: "assets/images/level2/phase2_win.png"},
+                {id: "level2_phase3_instructions", src: "assets/images/level2/phase3_instructions.png"},
+                {id: "level2_phase3_win", src: "assets/images/level2/phase3_win.png"}
             ];
             createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
 
@@ -132,9 +136,14 @@
                     }
                     else if(stage.name == "secondlevel3") {
                         playSound(target.name);
+                        if(target.parent.name == "hintButton")
+                            stage.getChildByName("secondLevel3Info").visible = true;
                     }
                     else if(stage.name == "firstlevel2" && target.parent.name == "hintButton"){
                         stage.getChildByName("firstLevel2Info").visible = true;
+                    }
+                    else if(stage.name == "secondlevel2" && target.parent.name == "hintButton"){
+                        stage.getChildByName("secondLevel2Info").visible = true;
                     }
                     break;
                 case "click":
@@ -150,8 +159,17 @@
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevelintro"){
                             firstLevel1();
                         }
+                        else if(target.parent.name == "backButton" && stage.name == "firstlevelintro"){
+                            selectionLevel();
+                        }
                         else if(target.name == "secondLevel" && stage.name == "selectionLevel"){
+                            secondLevelIntro();
+                        }
+                        else if(target.parent.name == "skipButton" && stage.name == "secondlevelintro"){
                             secondLevel1();
+                        }
+                        else if(target.parent.name == "backButton" && stage.name == "secondlevelintro"){
+                            selectionLevel();
                         }
                         else if(target.name == "rulesButton"){
                             rulesMenu();
@@ -167,10 +185,16 @@
                                 meterCounter += 100;
                             firstLevel2();
                         }
+                        else if(target.parent.name == "backButton" && stage.name == "firstlevel1"){
+                            firstLevelIntro();
+                        }
                         else if(target.parent.name == "skipButton" && stage.name == "secondlevel1"){
-                            if(meterCounter == 0)
+                            if(meterCounter == 940)
                                 meterCounter += 100;
                             secondLevel2();
+                        }
+                        else if(target.parent.name == "backButton" && stage.name == "secondlevel1"){
+                            secondLevelIntro();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel2"){
                             firstLevel3();
@@ -181,10 +205,16 @@
                         else if(target.parent.name == "skipButton" && stage.name == "secondlevel2"){
                             secondLevel3();
                         }
+                        else if(target.parent.name == "backButton" && stage.name == "secondlevel2"){
+                            secondLevel1();
+                        }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel3"){
                             selectionLevel();
                         }
-                        else if(stage.name == "firstlevel2" && fibonacci < 3){
+                        else if(target.parent.name == "skipButton" && stage.name == "secondlevel3"){
+                            creditsMenu();
+                        }
+                        else if(stage.name == "firstlevel2" && fibonacci < 3 && meterCounter < 500){
                             switch(target.name){
                                 case "cSharpNoteBtn":
                                     if(fibonacci == 2 && meterCounter > 100){
@@ -194,29 +224,19 @@
                                     else{
                                         meterCounter -= 50;
                                         fibonacci = 2;
-                                        if(meterCounter == 0)
-                                            firstLevel1();
                                     }
                                     break;
                                 case "fNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 0)
-                                        firstLevel1();
                                     break;
                                 case "gNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 0)
-                                        firstLevel1();
                                     break;
                                 case "dNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 0)
-                                        firstLevel1();
                                     break;
                                 case "fSharpNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 0)
-                                        firstLevel1();
                                     break;
                                 case "cNoteBtn":
                                     if(fibonacci == 1){
@@ -225,100 +245,70 @@
                                     }
                                     else{
                                         meterCounter -= 50;
-                                        if(meterCounter == 0)
-                                            firstLevel1();
                                     }
                                     break;
                                 case "aNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 0)
-                                        firstLevel1();
                                     break;
                             }
                         }
-                        else if(stage.name == "secondlevel2" && fibonacci < 3){
+                        else if(stage.name == "secondlevel2" && fibonacci < 3 && meterCounter < 1340){
                             switch(target.name){
                                 case "aNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "aSharpNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "bNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "cNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "cSharpNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "dNoteBtn":
                                     if(fibonacci == 1){
                                         meterCounter += 150;
                                         fibonacci = 2;
-                                        stage.getChildByName("boyContainer").getChildByName("rightBubbleSpeech").image = preload.getResult("d_bubble");
-                                        stage.getChildByName("girlContainer").visible = true;
                                     }
                                     else{
-                                        if(meterCounter == 940)
-                                            secondLevel1();
+                                        meterCounter -= 50;
                                     }
                                     break;
                                 case "dSharpNoteBtn":
-                                    if(fibonacci == 2 && meterCounter > 1050){
+                                    if(fibonacci == 2 && meterCounter > 1040){
                                         meterCounter = 1340;
                                         fibonacci = 3;
-                                        stage.getChildByName("girlContainer").getChildByName("leftBubbleSpeech").image = preload.getResult("dsharp_bubble");
                                     }
                                     else{
                                         meterCounter -= 50;
                                         fibonacci = 2;
-                                        if(meterCounter == 940)
-                                            secondLevel1();
                                     }
                                     break;
                                 case "eNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "fNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "fSharpNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "gNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                                 case "gSharpNoteBtn":
                                     meterCounter -= 50;
-                                    if(meterCounter == 940)
-                                        secondLevel1();
                                     break;
                             }
                         }
                         else if(target.parent.name == "backButton" && stage.name == "firstlevel3"){
                             firstLevel2();
                         }
-                        else if(stage.name == "firstlevel3" && fibonacci < 3 && stage.getChildByName("firstLevel3Info").image != preload.getResult("error")){
+                        else if(stage.name == "firstlevel3" && fibonacci < 3 && stage.getChildByName("firstLevel3Info").image != preload.getResult("error") && meterCounter < 940){
                             switch(target.name){
                                 case "csharp_sound":
                                     if(fibonacci == 2 && meterCounter > 300){
@@ -365,25 +355,25 @@
                                     break;
                             }
                         }
-                        else if(stage.name == "secondlevel3" && fibonacci < 3){
+                        else if(target.parent.name == "backButton" && stage.name == "secondlevel3"){
+                            secondLevel2();
+                        }
+                        else if(stage.name == "secondlevel3" && fibonacci < 3 && stage.getChildByName("secondLevel3Info").image != preload.getResult("error") && meterCounter < 1780){
                             switch(target.name){
                                 case "b_sound":
                                     meterCounter -= 50;
-                                    if(meterCounter == 1190)
-                                        secondLevel2();
                                     break;
                                 case "csharp_sound":
                                     meterCounter -= 50;
-                                    if(meterCounter == 1190)
-                                        secondLevel2();
                                     break;
                                 case "d_sound":
                                     if(fibonacci == 1){
                                         meterCounter += 250;
                                         fibonacci = 2;
                                     }
-                                    else if(meterCounter == 1190)
-                                        secondLevel2();
+                                    else{
+                                        meterCounter -= 50;
+                                    }
                                     break;
                                 case "dsharp_sound":
                                     if(fibonacci == 2 && meterCounter > 1190){
@@ -393,19 +383,13 @@
                                     else{
                                         meterCounter -= 50;
                                         fibonacci = 2;
-                                        if(meterCounter == 1190)
-                                            secondLevel2();
                                     }
                                     break;
                                 case "e_sound":
                                     meterCounter -= 50;
-                                    if(meterCounter == 1190)
-                                        secondLevel2();
                                     break;
                                 case "g_sound":
                                     meterCounter -= 50;
-                                    if(meterCounter == 1190)
-                                        secondLevel2();
                                     break;
                             }
 
@@ -418,6 +402,12 @@
                     else if(stage.name == "firstlevel3" && target.parent.name == "hintButton" && stage.getChildByName("firstLevel3Info").image != preload.getResult("level1_phase3_win")){
                         stage.getChildByName("firstLevel3Info").visible = false;
                     }
+                    else if(stage.name == "secondlevel2" && target.parent.name == "hintButton" && stage.getChildByName("secondLevel2Info").image != preload.getResult("level2_phase2_win")){
+                        stage.getChildByName("secondLevel2Info").visible = false;
+                    }
+                    else if(stage.name == "secondlevel3" && target.parent.name == "hintButton" && stage.getChildByName("secondLevel3Info").image != preload.getResult("level2_phase3_win")){
+                        stage.getChildByName("secondLevel3Info").visible = false;
+                    }
                     break;
                 default:
                     break;
@@ -426,7 +416,7 @@
         }
         function handleTick() {
             var currentTime = (new Date()).getTime();
-
+            var timeTemp;
             var time = Math.floor((currentTime-startTime)/1000);
             if(time > 59){
                 timerTxt.text = "Tempo: " + Math.floor(time/60) + "m" + time%60 + "s";
@@ -448,7 +438,19 @@
                     }
                     break;
                 case "firstlevel2":
-                    if(meterCounter <= 100){
+                    if(meterCounter == 0){
+                        stage.getChildByName("firstLevel2Info").visible = true;
+                        stage.getChildByName("firstLevel2Info").image = preload.getResult("error");
+                        if(_startTime == null){
+                            _startTime = (new Date()).getTime();
+                        }
+                        timeTemp = Math.floor((currentTime-_startTime)/1000);
+                        if(wait == timeTemp){
+                            firstLevel1();
+                            fibonacci = 2;
+                        }
+                    }
+                    else if(meterCounter <= 100){
                         stage.getChildByName("rightBubbleSpeech").image = preload.getResult("question_mark_right");
                         stage.getChildByName("cSharpBird").visible = false;
                         fibonacci = 1;
@@ -473,7 +475,7 @@
                         if(_startTime == null){
                             _startTime = (new Date()).getTime();
                         }
-                        var timeTemp = Math.floor((currentTime-_startTime)/1000);
+                        timeTemp = Math.floor((currentTime-_startTime)/1000);
                         if(wait == timeTemp){
                             firstLevel2();
                             fibonacci = 2;
@@ -498,22 +500,52 @@
                     }
                     break;
                 case "secondlevel2":
-                    if(meterCounter <= 1040){
+                    if(meterCounter == 940){
+                        stage.getChildByName("secondLevel2Info").visible = true;
+                        stage.getChildByName("secondLevel2Info").image = preload.getResult("error");
+                        if(_startTime == null){
+                            _startTime = (new Date()).getTime();
+                        }
+                        timeTemp = Math.floor((currentTime-_startTime)/1000);
+                        if(wait == timeTemp){
+                            secondLevel1();
+                            fibonacci = 2;
+                        }
+                    }
+                    else if(meterCounter <= 1040){
                         stage.getChildByName("boyContainer").getChildByName("rightBubbleSpeech").image = preload.getResult("question_mark_right");
                         stage.getChildByName("girlContainer").visible = false;
                         fibonacci = 1;
                     }
-                    else if(meterCounter == 1340 && fibonacci == 3 && !stage.getChildByName("skipButton")){
+                    else if(meterCounter == 1190 && fibonacci == 2){
+                        stage.getChildByName("boyContainer").getChildByName("rightBubbleSpeech").image = preload.getResult("d_bubble");
+                        stage.getChildByName("girlContainer").visible = true;
+                    }
+                    else if((meterCounter >= 1340 || fibonacci == 3) && !stage.getChildByName("skipButton")){
+                        stage.getChildByName("secondLevel2Info").image = preload.getResult("level2_phase2_win");
+                        stage.getChildByName("boyContainer").getChildByName("rightBubbleSpeech").image = preload.getResult("d_bubble");
+                        stage.getChildByName("girlContainer").visible = true;
+                        stage.getChildByName("girlContainer").getChildByName("leftBubbleSpeech").image = preload.getResult("dsharp_bubble");
+                        stage.getChildByName("secondLevel2Info").visible = true;
                         addSkipButton();
                     }
                     break;
                 case "secondlevel3":
                     if(meterCounter <= 1190){
-                        //stage.getChildByName("secondLevel3Info").image = preload.getResult("wrror");
-                        secondLevel2();
-                        fibonacci = 2;
+                        stage.getChildByName("secondLevel3Info").visible = true;
+                        stage.getChildByName("secondLevel3Info").image = preload.getResult("error");
+                        if(_startTime == null){
+                            _startTime = (new Date()).getTime();
+                        }
+                        timeTemp = Math.floor((currentTime-_startTime)/1000);
+                        if(wait == timeTemp){
+                            secondLevel2();
+                            fibonacci = 2;
+                        }
                     }
-                    else if(meterCounter == 1780 && fibonacci == 3 && !stage.getChildByName("skipButton")){
+                    else if((meterCounter >= 1780 || fibonacci == 3) && !stage.getChildByName("skipButton")){
+                        stage.getChildByName("secondLevel3Info").image = preload.getResult("level2_phase3_win");
+                        stage.getChildByName("secondLevel3Info").visible = true;
                         addSkipButton();
                     }
                     break;
@@ -565,6 +597,9 @@
         }
         function startMenuLevel(){
             stage.name = "startMenuLevel";
+
+            clearStage();
+            
             var startMenuBackground = new createjs.Bitmap(preload.getResult("start_menu_background"));
             stage.addChild(startMenuBackground);
 
@@ -610,9 +645,10 @@
         }
 
         function rulesMenu(){
+            stage.name = "rulesmenu";
+
             clearStage();
 
-            stage.name = "rulesmenu";
             var rulesMenuBackground = new createjs.Bitmap(preload.getResult("rules"));
 
             var backBtn = new createjs.Shape();
@@ -633,9 +669,10 @@
         }
 
         function creditsMenu(){
+            stage.name = "creditsmenu";
+
             clearStage();
 
-            stage.name = "creditsmenu";
             var creditsMenuBackground = new createjs.Bitmap(preload.getResult("credits"));
 
             var backBtn = new createjs.Shape();
@@ -711,23 +748,25 @@
         }
 
         function firstLevelIntro(){
-            clearStage();
-
             stage.name = "firstlevelintro";
+
+            clearStage();
 
             createjs.Ticker.addEventListener("tick", handleTick);
 
             var firstLevelIntroBackground = new createjs.Bitmap(preload.getResult("level1_intro"));
             stage.addChild(firstLevelIntroBackground);
 
+            addBackButton(650, 683);
             addSkipButton();
 
             stage.update();
         }
-        function firstLevel1(){
-            clearStage();
 
+        function firstLevel1(){
             stage.name = "firstlevel1";
+
+            clearStage();
 
             createjs.Ticker.addEventListener("tick", handleTick);
 
@@ -765,10 +804,12 @@
             cSharpBird.addChild(blueBird, cSharpBubbleSpeech);
             stage.addChild(cSharpBird);
 
+            addBackButton(34, 683);
             addSkipButton();
 
             stage.update();
         }
+
         function addSignButtons(){
             var cSharpNoteBtn = new createjs.Shape();
             cSharpNoteBtn.name = "cSharpNoteBtn";
@@ -837,9 +878,9 @@
         }
 
         function firstLevel2(){
-            clearStage();
-
             stage.name = "firstlevel2";
+
+            clearStage();
 
             createjs.Ticker.addEventListener("tick", handleTick);
             startTime = (new Date()).getTime();
@@ -1019,9 +1060,9 @@
             stage.addChild(cSharpNoteBtn, fNoteBtn, gNoteBtn, dNoteBtn, fSharpNoteBtn, cNoteBtn, aNoteBtn, bNoteBtn, eNoteBtn, dSharpNoteBtn, gSharpNoteBtn);
         }
         function firstLevel3(){
-            clearStage();
-
             stage.name = "firstlevel3";
+
+            clearStage();
 
             createjs.Ticker.addEventListener("tick", handleTick);
             startTime = (new Date()).getTime();
@@ -1046,13 +1087,26 @@
 
             stage.update();
         }
+        function secondLevelIntro(){
+            stage.name = "secondlevelintro";
 
-        function secondLevel1(){
             clearStage();
 
+            createjs.Ticker.addEventListener("tick", handleTick);
+
+            var secondLevelIntroBackground = new createjs.Bitmap(preload.getResult("level2_intro"));
+            stage.addChild(secondLevelIntroBackground);
+
+            addBackButton(650, 683);
+            addSkipButton();
+
+            stage.update();
+        }
+
+        function secondLevel1(){
             stage.name = "secondlevel1";
 
-            meterCounter = 940;
+            clearStage();
 
             createjs.Ticker.addEventListener("tick", handleTick);
 
@@ -1081,6 +1135,7 @@
 
             stage.addChild(dSharpBubbleSpeech);
 
+            addBackButton(34, 683);
             addSkipButton();
 
             stage.update();
@@ -1403,10 +1458,11 @@
 
             stage.addChild(gNoteBtn, bNoteBtn, cSharpNoteBtn, eNoteBtn, dSharpNoteBtn, aSharpNoteBtn, cNoteBtn, dSharpNoteBtn2, bNoteBtn2, aNoteBtn, eNoteBtn2, gNoteBtn2, aNoteBtn2, aSharpNoteBtn2, cNoteBtn2, fSharpNoteBtn, dNoteBtn, gSharpNoteBtn, cNoteBtn3, fNoteBtn, gNoteBtn3, bNoteBtn3, eNoteBtn3, aNoteBtn3, fSharpNoteBtn2, dSharpNoteBtn3, fNoteBtn2, bNoteBtn4, cNoteBtn4);
         }
-        function secondLevel2(){
-            clearStage();
 
+        function secondLevel2(){
             stage.name = "secondlevel2";
+
+            clearStage();
 
             createjs.Ticker.addEventListener("tick", handleTick);
             startTime = (new Date()).getTime();
@@ -1415,6 +1471,14 @@
             stage.addChild(secondLevel2Background);
             stage.addChild(meterCounterTxt);
             stage.addChild(timerTxt);
+
+            var secondLevel2Info = new createjs.Bitmap(preload.getResult("level2_phase2_instructions"));
+            secondLevel2Info.name = "secondLevel2Info";
+            secondLevel2Info.x = 110;
+            secondLevel2Info.y = 100;
+            secondLevel2Info.alpha = 0.9;
+            secondLevel2Info.visible = false;
+            stage.addChild(secondLevel2Info);
 
             var rightBubbleSpeech = new createjs.Bitmap(preload.getResult("question_mark_right"));
             rightBubbleSpeech.name = "rightBubbleSpeech";
@@ -1456,6 +1520,9 @@
             girlContainer.addChild(girl, leftBubbleSpeech);
             girlContainer.visible = false;
             stage.addChild(girlContainer);
+
+            addBackButton(34, 683);
+            addHintButton();
 
             stage.update();
         }
@@ -1531,9 +1598,9 @@
             stage.addChild(cSharpNoteBtn, gNoteBtn, dNoteBtn, bNoteBtn, eNoteBtn, dSharpNoteBtn);
         }
         function secondLevel3(){
-            clearStage();
-
             stage.name = "secondlevel3";
+
+            clearStage();
 
             createjs.Ticker.addEventListener("tick", handleTick);
             startTime = (new Date()).getTime();
@@ -1543,16 +1610,31 @@
             stage.addChild(meterCounterTxt);
             stage.addChild(timerTxt);
 
+            var secondLevel3Info = new createjs.Bitmap(preload.getResult("level2_phase3_instructions"));
+            secondLevel3Info.name = "secondLevel3Info";
+            secondLevel3Info.x = 110;
+            secondLevel3Info.y = 100;
+            secondLevel3Info.alpha = 0.9;
+            secondLevel3Info.visible = false;
+            stage.addChild(secondLevel3Info);
+
             addTracksButtons();
+
+            addBackButton(34, 683);
+            addHintButton();
 
             stage.update();
         }
         function selectionLevel(){
+            stage.name = "selectionLevel";
+
             clearStage();
 
-            stage.name = "selectionLevel";
             var selectionLevelBackground = new createjs.Bitmap(preload.getResult("selection_level_background"));
             stage.addChild(selectionLevelBackground);
+
+            if(introSound == null)
+                playSound("intro");
 
             var firstLevel = new createjs.Shape();
             firstLevel.graphics.beginFill("red").drawRoundRect(0, 0, 130, 35, 10);
@@ -1603,11 +1685,13 @@
             if(trackSound != null){
                 kidSound.stop();
             }
-            if(introSound != null && !(stage.name == "startMenuLevel" || stage.name == "rulesmenu" || stage.name == "creditsmenu" || stage.name == "selectionLevel")){
+            if(introSound != null && stage.name != "startMenuLevel" && stage.name != "rulesmenu" && stage.name != "creditsmenu" && stage.name != "selectionLevel"){
                 introSound.stop();
+                introSound = null;
             }
             if(fibonacci == 3)
                 fibonacci = 1;
+            wait = 3;
         }
     </script>
 </head>
