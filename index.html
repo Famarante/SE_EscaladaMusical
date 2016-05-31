@@ -83,7 +83,7 @@
                 {id: "back_button", src: "assets/images/back_button.png"},
                 {id: "question_mark_right", src: "assets/images/question_mark_right_bubble.png"},
                 {id: "question_mark_left", src: "assets/images/question_mark_left_bubble.png"},
-                {id: "wrror", src: "assets/images/error.png"},
+                {id: "error", src: "assets/images/error.png"},
                 {id: "hint", src: "assets/images/hint.png"},
                 {id: "credits", src: "assets/images/credits.png"},
                 {id: "rules", src: "assets/images/rules.png"},
@@ -124,19 +124,16 @@
             var target = evt.target;
             switch(evt.type){
                 case "mouseover":
-                        console.log(target);
-                        console.log(stage);
                     if(stage.name == "firstlevel3") {
                         playSound(target.name);
+                        if(target.parent.name == "hintButton")
+                            stage.getChildByName("firstLevel3Info").visible = true;
                     }
                     else if(stage.name == "secondlevel3") {
                         playSound(target.name);
                     }
                     else if(stage.name == "firstlevel2" && target.parent.name == "hintButton"){
                         stage.getChildByName("firstLevel2Info").visible = true;
-                    }
-                    else if(stage.name == "firstlevel3" && target.parent.name == "hintButton"){
-                        stage.getChildByName("firstLevel3Info").visible = true;
                     }
                     break;
                 case "click":
@@ -320,7 +317,7 @@
                         else if(target.parent.name == "backButton" && stage.name == "firstlevel3"){
                             firstLevel2();
                         }
-                        else if(stage.name == "firstlevel3" && fibonacci < 3){
+                        else if(stage.name == "firstlevel3" && fibonacci < 3 && stage.getChildByName("firstLevel3Info").image != preload.getResult("error")){
                             switch(target.name){
                                 case "csharp_sound":
                                     if(fibonacci == 2 && meterCounter > 300){
@@ -470,6 +467,7 @@
                     break;
                 case "firstlevel3":
                     if(meterCounter <= 300){
+                        stage.getChildByName("firstLevel3Info").visible = true;
                         stage.getChildByName("firstLevel3Info").image = preload.getResult("error");
                         if(_startTime == null){
                             _startTime = (new Date()).getTime();
@@ -480,7 +478,7 @@
                             fibonacci = 2;
                         }
                     }
-                    else if((meterCounter == 940 || fibonacci == 3) && !stage.getChildByName("skipButton")){
+                    else if((meterCounter >= 940 || fibonacci == 3) && !stage.getChildByName("skipButton")){
                         stage.getChildByName("firstLevel3Info").image = preload.getResult("level1_phase3_win");
                         stage.getChildByName("firstLevel3Info").visible = true;
                         addSkipButton();
