@@ -297,7 +297,6 @@
                             }
                         }
                         else if(stage.name == "firstlevel3" && fibonacci < 3){
-                            console.log(target.name);
                             switch(target.name){
                                 case "csharp_sound":
                                     if(fibonacci == 2 && meterCounter > 300){
@@ -345,7 +344,6 @@
                             }
                         }
                         else if(stage.name == "secondlevel3" && fibonacci < 3){
-                            console.log(target.name);
                             switch(target.name){
                                 case "b_sound":
                                     meterCounter -= 50;
@@ -492,29 +490,30 @@
 
         function playSound(target) {
             //Play the sound: play (src, interrupt, delay, offset, loop, volume, pan)
+            var random, ppc;
             switch (stage.name){
                 case "firstlevel1":
-                    var random = Math.floor((Math.random() * 3) + 1);
+                    random = Math.floor((Math.random() * 3) + 1);
                     ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.1});
                     birdSound = createjs.Sound.play(target, ppc);
                     if (birdSound == null || birdSound.playState == createjs.Sound.PLAY_FAILED) {
                     }
                     break;
                 case "firstlevel3":
-                    var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: 1, volume: 0.1});
+                    ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: 1, volume: 0.1});
                     houseSound = createjs.Sound.play(target, ppc);
                     if (houseSound == null || houseSound.playState == createjs.Sound.PLAY_FAILED) {
                     }
                     break;
                 case "secondlevel1":
-                    var random = Math.floor((Math.random() * 3) + 1);
+                    random = Math.floor((Math.random() * 3) + 1);
                     ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: random, volume: 0.1});
                     kidSound = createjs.Sound.play(target, ppc);
                     if (kidSound == null || kidSound.playState == createjs.Sound.PLAY_FAILED) {
                     }
                     break;
                 case "secondlevel3":
-                    var ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: 1, volume: 0.1});
+                    ppc = new createjs.PlayPropsConfig().set({interrupt: createjs.Sound.INTERRUPT_ANY, loop: 1, volume: 0.1});
                     trackSound = createjs.Sound.play(target, ppc);
                     if (trackSound == null || trackSound.playState == createjs.Sound.PLAY_FAILED) {
                     }
