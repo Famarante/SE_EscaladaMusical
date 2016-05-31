@@ -79,10 +79,12 @@
                 {id: "background", src: "assets/images/background.png"},
                 {id: "start_menu_background", src: "assets/images/start_menu_background.png"},
                 {id: "selection_level_background", src: "assets/images/selection_level_background.png"},
-                {id: "pass_button", src: "assets/images/pass_button.png"},
+                {id: "skip_button", src: "assets/images/skip_button.png"},
+                {id: "back_button", src: "assets/images/back_button.png"},
                 {id: "question_mark_right", src: "assets/images/question_mark_right_bubble.png"},
                 {id: "question_mark_left", src: "assets/images/question_mark_left_bubble.png"},
                 {id: "wrror", src: "assets/images/error.png"},
+                {id: "hint", src: "assets/images/hint.png"},
                 {id: "credits", src: "assets/images/credits.png"},
                 {id: "rules", src: "assets/images/rules.png"},
                 //LEVEL 1 ITEMS
@@ -128,6 +130,12 @@
                     else if(stage.name == "secondlevel3") {
                         playSound(target.name);
                     }
+                    else if(stage.name == "firstlevel2" && target.parent.name == "hintButton"){
+                        stage.getChildByName("firstLevel2Info").visible = true;
+                    }
+                    else if(stage.name == "firstlevel3" && target.parent.name == "hintButton"){
+                        stage.getChildByName("firstLevel3Info").visible = true;
+                    }
                     break;
                 case "click":
                         if(target.name == "startButton") {
@@ -135,6 +143,9 @@
                         }
                         else if(target.name == "firstLevel" && stage.name == "selectionLevel"){
                             firstLevelIntro();
+                        }
+                        else if(target.parent.name == "backButton" && stage.name == "selectionLevel"){
+                            startMenuLevel();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevelintro"){
                             firstLevel1();
@@ -152,15 +163,20 @@
                             startMenuLevel();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel1"){
-                            meterCounter += 100;
+                            if(meterCounter == 0)
+                                meterCounter += 100;
                             firstLevel2();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "secondlevel1"){
-                            meterCounter += 100;
+                            if(meterCounter == 0)
+                                meterCounter += 100;
                             secondLevel2();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel2"){
                             firstLevel3();
+                        }
+                        else if(target.parent.name == "backButton" && stage.name == "firstlevel2"){
+                            firstLevel1();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "secondlevel2"){
                             secondLevel3();
@@ -174,7 +190,6 @@
                                     if(fibonacci == 2 && meterCounter > 100){
                                         meterCounter = 500;
                                         fibonacci = 3;
-                                        stage.getChildByName("cSharpBird").getChildByName("leftBubbleSpeech").image = preload.getResult("csharp_bubble");
                                     }
                                     else{
                                         meterCounter -= 50;
@@ -207,10 +222,9 @@
                                     if(fibonacci == 1){
                                         meterCounter += 200;
                                         fibonacci = 2;
-                                        stage.getChildByName("rightBubbleSpeech").image = preload.getResult("c_bubble");
-                                        stage.getChildByName("cSharpBird").visible = true;
                                     }
                                     else{
+                                        meterCounter -= 50;
                                         if(meterCounter == 0)
                                             firstLevel1();
                                     }
@@ -300,6 +314,9 @@
                                         secondLevel1();
                                     break;
                             }
+                        }
+                        else if(target.parent.name == "backButton" && stage.name == "firstlevel3"){
+                            firstLevel2();
                         }
                         else if(stage.name == "firstlevel3" && fibonacci < 3){
                             switch(target.name){
@@ -395,6 +412,12 @@
                         }
                     break;
                 case "mouseout":
+                    if(stage.name == "firstlevel2" && target.parent.name == "hintButton" && stage.getChildByName("firstLevel2Info").image != preload.getResult("level1_phase2_win")){
+                        stage.getChildByName("firstLevel2Info").visible = false;
+                    }
+                    else if(stage.name == "firstlevel3" && target.parent.name == "hintButton" && stage.getChildByName("firstLevel3Info").image != preload.getResult("level1_phase3_win")){
+                        stage.getChildByName("firstLevel3Info").visible = false;
+                    }
                     break;
                 default:
                     break;
@@ -434,14 +457,18 @@
                         stage.getChildByName("rightBubbleSpeech").image = preload.getResult("c_bubble");
                         stage.getChildByName("cSharpBird").visible = true;
                     }
-                    else if(meterCounter == 500 && fibonacci == 3 && !stage.getChildByName("skipButton")){
+                    else if((meterCounter >= 500 || fibonacci == 3) && !stage.getChildByName("skipButton")){
                         stage.getChildByName("firstLevel2Info").image = preload.getResult("level1_phase2_win");
+                        stage.getChildByName("rightBubbleSpeech").image = preload.getResult("c_bubble");
+                        stage.getChildByName("cSharpBird").visible = true;
+                        stage.getChildByName("cSharpBird").getChildByName("leftBubbleSpeech").image = preload.getResult("csharp_bubble");
+                        stage.getChildByName("firstLevel2Info").visible = true;
                         addSkipButton();
                     }
                     break;
                 case "firstlevel3":
                     if(meterCounter <= 300){
-                        stage.getChildByName("firstLevel3Info").image = preload.getResult("wrror");
+                        stage.getChildByName("firstLevel3Info").image = preload.getResult("error");
                         if(_startTime == null){
                             _startTime = (new Date()).getTime();
                         }
@@ -451,8 +478,9 @@
                             fibonacci = 2;
                         }
                     }
-                    else if(meterCounter == 940 && fibonacci == 3 && !stage.getChildByName("skipButton")){
+                    else if((meterCounter == 940 || fibonacci == 3) && !stage.getChildByName("skipButton")){
                         stage.getChildByName("firstLevel3Info").image = preload.getResult("level1_phase3_win");
+                        stage.getChildByName("firstLevel3Info").visible = true;
                         addSkipButton();
                     }
                     break;
@@ -618,27 +646,56 @@
         }
 
         function addSkipButton() {
-            var skipBtnBg = new createjs.Shape();
-            skipBtnBg.name = "skipButtonBackground";
-            skipBtnBg.graphics.beginFill("red").drawRoundRect(0, 0, 256, 87, 20);
-            skipBtnBg.alpha = 0.01;
-
-            var skipBtnImage = new createjs.Bitmap(preload.getResult("pass_button"));
+            var skipBtnImage = new createjs.Bitmap(preload.getResult("skip_button"));
             skipBtnImage.name = "skipButtonImage";
             skipBtnImage.x = 740;
             skipBtnImage.y = 650;
 
             var skipBtn = new createjs.Container();
             skipBtn.name = "skipButton";
-            skipBtn.x = 740;
-            skipBtn.y = 650;
-            skipBtn.addChild(skipBtnBg);
+            skipBtn.addChild(skipBtnImage);
 
             skipBtn.on("click", handleMouseEvent);
 
             skipBtn.cursor = "pointer";
 
-            stage.addChild(skipBtn, skipBtnImage);
+            stage.addChild(skipBtn);
+        }
+
+        function addHintButton() {
+            var hintBtnImage = new createjs.Bitmap(preload.getResult("hint"));
+            hintBtnImage.name = "hintButtonImage";
+            hintBtnImage.scaleX = hintBtnImage.scaleY = 0.1;
+
+            var hintBtn = new createjs.Container();
+            hintBtn.name = "hintButton";
+            hintBtn.x = 625;
+            hintBtn.y = 640;
+            hintBtn.addChild(hintBtnImage);
+
+            hintBtn.on("mouseover", handleMouseEvent);
+            hintBtn.on("mouseout", handleMouseEvent);
+
+            hintBtn.cursor = "pointer";
+
+            stage.addChild(hintBtn);
+        }
+
+        function addBackButton(x, y) {
+            var backBtnImage = new createjs.Bitmap(preload.getResult("back_button"));
+            backBtnImage.name = "backButtonImage";
+
+            var backBtn = new createjs.Container();
+            backBtn.name = "backButton";
+            backBtn.x = x;
+            backBtn.y = y;
+            backBtn.addChild(backBtnImage);
+
+            backBtn.on("click", handleMouseEvent);
+
+            backBtn.cursor = "pointer";
+
+            stage.addChild(backBtn);
         }
 
         function firstLevelIntro(){
@@ -785,6 +842,7 @@
             firstLevel2Info.x = 110;
             firstLevel2Info.y = 100;
             firstLevel2Info.alpha = 0.9;
+            firstLevel2Info.visible = false;
             stage.addChild(firstLevel2Info);
 
             var rightBubbleSpeech = new createjs.Bitmap(preload.getResult("question_mark_right"));
@@ -817,6 +875,9 @@
             cSharpBird.addChild(blueBird, leftBubbleSpeech);
             cSharpBird.visible = false;
             stage.addChild(cSharpBird);
+
+            addBackButton(26, 650);
+            addHintButton();
 
             stage.update();
         }
@@ -963,9 +1024,13 @@
             firstLevel3Info.x = 110;
             firstLevel3Info.y = 100;
             firstLevel3Info.alpha = 0.9;
+            firstLevel3Info.visible = false;
             stage.addChild(firstLevel3Info);
 
             addHousesButtons();
+
+            addBackButton(26, 650);
+            addHintButton();
 
             stage.update();
         }
@@ -1504,6 +1569,8 @@
                 stage.addChild(secondLevel);
             }
 
+            addBackButton(740, 650);
+
             stage.update();
         }
         function clearStage(){
@@ -1524,7 +1591,8 @@
             if(trackSound != null){
                 kidSound.stop();
             }
-            fibonacci = 1;
+            if(fibonacci == 3)
+                fibonacci = 1;
         }
     </script>
 </head>
