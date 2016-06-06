@@ -777,7 +777,13 @@
         }
 
         function addMuteButton() {
-            var muteBtnImage = new createjs.Bitmap(preload.getResult("unmute"));
+            var muteBtnImage;
+            if(muted == 0){
+                muteBtnImage = new createjs.Bitmap(preload.getResult("unmute"));
+            }
+            else if(muted == 1){
+                muteBtnImage = new createjs.Bitmap(preload.getResult("mute"));
+            }
             muteBtnImage.name = "muteButtonImage";
             muteBtnImage.x = 940;
             muteBtnImage.y = 35;
@@ -1823,10 +1829,6 @@
             }
             if(trackSound != null){
                 trackSound.stop();
-            }
-            if(introSound != null && stage.name != "startMenuLevel" && stage.name != "rulesmenu" && stage.name != "creditsmenu" && stage.name != "selectionLevel"){
-                introSound.stop();
-                introSound = null;
             }
             if(fibonacci == 3)
                 fibonacci = 1;
