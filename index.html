@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
     <script>
-        var stage, preload, bird, startTime, timerTxt, meterCounter = 0, errorCount = 0, meterCounterTxt, bubbleSpeech, factor = 1, fibonacci = 1, wait = 3, _startTime;
+        var stage, preload, bird, startTime, timerTxt, meterCounter = 0, errorCount = 0, meterCounterTxt, bubbleSpeech, factor = 1, fibonacci = 1, wait = 3, _startTimem, muted = 0;
         var birdSound, houseSound, kidSound, trackSound, introSound;
         
         document.documentElement.style.overflow = 'hidden';  // firefox, chrome
@@ -89,6 +89,8 @@
                 {id: "hint", src: "assets/images/hint.png"},
                 {id: "credits", src: "assets/images/credits.png"},
                 {id: "rules", src: "assets/images/rules.png"},
+                {id: "unmute", src: "assets/images/unmute.png"},
+                {id: "mute", src: "assets/images/mute.png"},
                 //LEVEL 1 ITEMS
                 {id: "level1_background", src: "assets/images/level1/background.png"},
                 {id: "level1_birds", src: "assets/images/level1/phase1_background.png"},
@@ -166,9 +168,11 @@
                         }
                         else if(target.parent.name == "muteButton"){
                             if(introSound.paused == false){
+                                muted = 1;
                                 introSound.paused = true;
                             }
                             else{
+                                muted = 0;
                                 introSound.paused = false;
                             }
                         }
@@ -465,6 +469,12 @@
             }
             else{
                 timerTxt.text = "Tempo: " + time + "s";
+            }
+            if(muted == 0 && stage.getChildByName("muteButton")){
+                stage.getChildByName("muteButton").getChildByName("muteButtonImage").image = preload.getResult("unmute");
+            }
+            else if(muted == 1 && stage.getChildByName("muteButton")){
+                stage.getChildByName("muteButton").getChildByName("muteButtonImage").image = preload.getResult("mute");
             }
             switch(stage.name){
                 case "firstlevel1":
@@ -767,11 +777,11 @@
         }
 
         function addMuteButton() {
-            var muteBtnImage = new createjs.Bitmap(preload.getResult("skip_button"));
+            var muteBtnImage = new createjs.Bitmap(preload.getResult("unmute"));
             muteBtnImage.name = "muteButtonImage";
-            muteBtnImage.x = 480;
-            muteBtnImage.y = 50;
-            muteBtnImage.scaleX = muteBtnImage.scaleY = 0.2;
+            muteBtnImage.x = 940;
+            muteBtnImage.y = 35;
+            muteBtnImage.scaleX = muteBtnImage.scaleY = 0.025;
 
             var muteBtn = new createjs.Container();
             muteBtn.name = "muteButton";
