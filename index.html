@@ -180,6 +180,10 @@
                             startMenuLevel();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevelintro"){
+                            if(introSound.paused == false){
+                                muted = 1;
+                                introSound.paused = true;
+                            }
                             firstLevel1();
                         }
                         else if(target.parent.name == "backButton" && stage.name == "firstlevelintro"){
@@ -189,6 +193,10 @@
                             secondLevelIntro();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "secondlevelintro"){
+                            if(introSound.paused == false){
+                                muted = 1;
+                                introSound.paused = true;
+                            }
                             secondLevel1();
                         }
                         else if(target.parent.name == "backButton" && stage.name == "secondlevelintro"){
@@ -209,6 +217,10 @@
                             firstLevel2();
                         }
                         else if(target.parent.name == "backButton" && stage.name == "firstlevel1"){
+                            if(introSound.paused == true){
+                                muted = 0;
+                                introSound.paused = false;
+                            }
                             firstLevelIntro();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "secondlevel1"){
@@ -217,6 +229,10 @@
                             secondLevel2();
                         }
                         else if(target.parent.name == "backButton" && stage.name == "secondlevel1"){
+                            if(introSound.paused == true){
+                                muted = 0;
+                                introSound.paused = false;
+                            }
                             secondLevelIntro();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel2"){
@@ -232,9 +248,17 @@
                             secondLevel1();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "firstlevel3"){
+                            if(introSound.paused == true){
+                                muted = 0;
+                                introSound.paused = false;
+                            }
                             selectionLevel();
                         }
                         else if(target.parent.name == "skipButton" && stage.name == "secondlevel3"){
+                            if(introSound.paused == true){
+                                muted = 0;
+                                introSound.paused = false;
+                            }
                             creditsMenu();
                         }
                         else if(stage.name == "firstlevel2" && fibonacci < 3 && meterCounter < 500){
@@ -849,6 +873,7 @@
 
             addBackButton(650, 683);
             addSkipButton();
+            addMuteButton();
 
             stage.update();
         }
@@ -1239,6 +1264,7 @@
 
             addBackButton(650, 683);
             addSkipButton();
+            addMuteButton();
 
             stage.update();
         }
